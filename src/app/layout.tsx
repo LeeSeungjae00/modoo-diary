@@ -2,6 +2,7 @@ import Head from "next/head";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "@/components/header";
+import ReactQueryProvider from "./ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       </Head>
       <body className={inter.className}>
         <Header></Header>
-        <div className="max-w-5xl mx-auto w-screen h-screen">{children}</div>
+        <div className="max-w-5xl mx-auto w-screen h-screen">
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </div>
       </body>
     </html>
   );

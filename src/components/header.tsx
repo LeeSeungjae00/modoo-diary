@@ -36,7 +36,7 @@ export default function Header() {
             <Link href="/auth/login" className="font-bold">
               로그인
             </Link>
-            <Link href="/auth/signin" className="font-bold">
+            <Link href="/auth/signup" className="font-bold">
               회원 가입
             </Link>
           </div>
