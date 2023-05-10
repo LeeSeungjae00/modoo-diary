@@ -1,7 +1,10 @@
 "use client";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
+import { removeAuthToken } from "@/lib/authUtill";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/authInfo.context";
 
 const GlobalNav = styled.nav`
   position: absolute;
@@ -25,6 +28,13 @@ const LocalNav = styled.nav`
 `;
 
 export default function Header() {
+  const { state, dispatch } = useContext(AuthContext);
+
+  const logout = () => {
+    removeAuthToken();
+    dispatch({ type: "SIGNOOUT", payload: true });
+  };
+
   return (
     <>
       <GlobalNav>
@@ -32,14 +42,20 @@ export default function Header() {
           <Link href="/" className="font-bold">
             모두의 일기
           </Link>
-          <div className="flex gap-2">
-            <Link href="/auth/login" className="font-bold">
-              로그인
-            </Link>
-            <Link href="/auth/signup" className="font-bold">
-              회원 가입
-            </Link>
-          </div>
+          {state.isLogin ? (
+            <button onClick={logout} className="font-bold">
+              로그아웃
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <Link href="/auth/login" className="font-bold">
+                로그인
+              </Link>
+              <Link href="/auth/signup" className="font-bold">
+                회원 가입
+              </Link>
+            </div>
+          )}
         </div>
       </GlobalNav>
       <LocalNav>

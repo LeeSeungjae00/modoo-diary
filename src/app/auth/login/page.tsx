@@ -1,7 +1,7 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { postSignIn } from "@/api/auth";
@@ -10,9 +10,11 @@ import { useRouter } from "next/navigation";
 import InputAlert from "@/components/common/inputAlert";
 import Link from "next/link";
 import { setAuthToken } from "@/lib/authUtill";
+import { AuthContext } from "@/context/authInfo.context";
 
 export default function SignIn() {
   const router = useRouter();
+  const { dispatch } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -23,6 +25,7 @@ export default function SignIn() {
     onSuccess: ({ data }) => {
       setAuthToken(data.data);
       router.push("/");
+      dispatch({ type: "SIGNIN", payload: true });
     },
   });
 
