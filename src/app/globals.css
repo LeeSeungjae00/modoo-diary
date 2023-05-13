@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Chilgok_lws";
+  src: url("/static/fonts/Together-KwonJungae.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
