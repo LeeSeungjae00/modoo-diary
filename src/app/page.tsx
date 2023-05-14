@@ -1,9 +1,12 @@
 "use client";
 import { getDiarys } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
+import useIntersection from "@/hooks/useIntersection";
 import styled from "@emotion/styled";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 export type Products = {
   products: number[];
@@ -19,7 +22,14 @@ const DiaryDiv = styled.div`
 `;
 
 export default function Home() {
-  const query = useInfiniteQuery({
+  const {
+    data,
+    isSuccess,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+  } = useInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],
     queryFn: ({ pageParam = 0 }) => getDiarys(pageParam),
     getNextPageParam: (lastPage) => {
@@ -30,36 +40,48 @@ export default function Home() {
       return undefined;
     },
   });
+  const fetchMoreRef = useRef<HTMLDivElement>(null);
+  const intersecting = useIntersection(fetchMoreRef);
+
+  useEffect(() => {
+    if (!intersecting || !isSuccess || !hasNextPage || isFetchingNextPage)
+      return;
+    fetchNextPage();
+  }, [intersecting]);
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
-      <button
-        onClick={() => {
-          query.fetchNextPage();
-        }}
-      >
-        go
-      </button>
-
-      {query.data &&
-        query.data.pages
+      {data &&
+        data.pages
           .reduce((prev: any[], curr) => {
             return [...prev, ...curr.data.data.content];
           }, [])
           .map((diary) => {
             return (
               <DiaryDiv key={diary.id}>
-                <div className="flex justify-between">
+                <div className="flex justify-between w-full">
                   <p className="text-lg">{diary.nickName}의 일기</p>
+                  <p>
+                    {format(new Date(diary.createdTime), "yyyy년 M월 d일 EEE", {
+                      locale: ko,
+                    })}
+                    요일
+                  </p>
                 </div>
                 <div>
-                  <p className="pb-1">제목 : {diary.title}</p>
+                  <p className="pb-1 text-lg">제목 : {diary.title}</p>
                   <p>오늘날씨 {diary.weather}</p>
                   <p>{diary.content}</p>
                 </div>
               </DiaryDiv>
             );
           })}
+
+      <div ref={fetchMoreRef} />
+      {isLoading && <p>일기를 쓰고있어요...</p>}
+      {!isLoading && !hasNextPage && (
+        <p className="pt-5">🎉 모든 일기를 다 읽으셨어요</p>
+      )}
     </main>
   );
 }
