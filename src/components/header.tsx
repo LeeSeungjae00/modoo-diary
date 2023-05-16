@@ -1,10 +1,11 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { removeAuthToken } from "@/lib/authUtill";
+import { getParsedToken, removeAuthToken } from "@/lib/authUtill";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/authInfo.context";
+import { FontSpan } from "./common/fontSpan";
 
 const GlobalNav = styled.nav`
   position: absolute;
@@ -16,19 +17,41 @@ const GlobalNav = styled.nav`
   padding: 0 1rem;
 `;
 
-const LocalNav = styled.nav`
-  position: absolute;
-  top: 50px;
+const LocalNav = styled.nav<{ isSticky: boolean }>`
+  position: ${(props) => (props.isSticky ? "fixed" : "absolute")};
+  top: ${(props) => (props.isSticky ? "0px" : "50px")};
   left: 0;
   z-index: 11;
   width: 100%;
   height: 52px;
   padding: 0 1rem;
   border-bottom: 1px solid #ddd;
+  -webkit-backdrop-filter: saturate(180%) blur(15px);
+  -moz-backdrop-filter: saturate(180%) blur(15px);
+  -o-backdrop-filter: saturate(180%) blur(15px);
+  backdrop-filter: saturate(180%) blur(15px);
+  background: rgba(255, 255, 255, 0.1);
 `;
 
 export default function Header() {
   const { state, dispatch } = useContext(AuthContext);
+  const [isSticky, setIsSticky] = useState(false);
+  const onScroll = useCallback(() => {
+    const { scrollY } = window;
+    if (scrollY < 50) {
+      setIsSticky(false);
+    } else {
+      setIsSticky(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [onScroll]);
 
   const logout = () => {
     removeAuthToken();
@@ -39,8 +62,17 @@ export default function Header() {
     <>
       <GlobalNav>
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="font-bold">
-            모두의 일기
+          <Link href="/" className="font-bold text-lg flex">
+            ✎
+            {state.isLogin
+              ? (
+                  <FontSpan className="text-lg">
+                    {" "}
+                    {getParsedToken()?.nickName}
+                  </FontSpan>
+                ) || ""
+              : " 모두"}
+            의 일기
           </Link>
           {state.isLogin ? (
             <button onClick={logout} className="font-bold">
@@ -58,8 +90,18 @@ export default function Header() {
           )}
         </div>
       </GlobalNav>
-      <LocalNav>
-        <div className="h-full max-w-5xl mx-auto flex items-center"></div>
+      <LocalNav isSticky={isSticky}>
+        {state.isLogin ? (
+          <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
+            <Link href="/write" className="font-bold">
+              일기 쓰기 ✎
+            </Link>
+          </div>
+        ) : (
+          <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
+            <p className="font-bold">로그인을 하고 일기를 써보세요</p>
+          </div>
+        )}
       </LocalNav>
     </>
   );

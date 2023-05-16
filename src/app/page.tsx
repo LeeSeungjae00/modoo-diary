@@ -7,6 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { FontSpan } from "@/components/common/fontSpan";
 
 export type Products = {
   products: number[];
@@ -50,7 +51,7 @@ export default function Home() {
   }, [intersecting]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex min-h-screen flex-col items-center p-24 pt-28 ">
       {data &&
         data.pages
           .reduce((prev: any[], curr) => {
@@ -78,9 +79,9 @@ export default function Home() {
           })}
 
       <div ref={fetchMoreRef} />
-      {isLoading && <p>일기를 쓰고있어요...</p>}
+      {isLoading && <FontSpan className="pt-5">일기를 쓰고있어요...</FontSpan>}
       {!isLoading && !hasNextPage && (
-        <p className="pt-5">🎉 모든 일기를 다 읽으셨어요</p>
+        <p className="pt-5">🎉 모든 일기를 다 읽으셨어요.</p>
       )}
     </main>
   );
