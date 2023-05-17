@@ -20,6 +20,15 @@ const DiaryDiv = styled.div`
   width: 100%;
   align-items: flex-start;
   padding: 0.5rem;
+  background-size: cover;
+  margin-bottom: 1.5rem;
+  /* border: 1px solid #4e4e4e; */
+  background-color: #f2f2f2;
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 `;
 
 export default function Home() {
@@ -30,6 +39,7 @@ export default function Home() {
     fetchNextPage,
     hasNextPage,
     isLoading,
+    isFetching,
   } = useInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],
     queryFn: ({ pageParam = 0 }) => getDiarys(pageParam),
@@ -51,7 +61,7 @@ export default function Home() {
   }, [intersecting]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 pt-28 ">
+    <main className="flex min-h-screen max-w-screen-lg flex-col items-center p-8 pt-28 ">
       {data &&
         data.pages
           .reduce((prev: any[], curr) => {
@@ -62,24 +72,42 @@ export default function Home() {
               <DiaryDiv key={diary.id}>
                 <div className="flex justify-between w-full">
                   <p className="text-lg">{diary.nickName}의 일기</p>
-                  <p>
-                    {format(new Date(diary.createdTime), "yyyy년 M월 d일 EEE", {
-                      locale: ko,
-                    })}
-                    요일
-                  </p>
+                  <div>
+                    <p>
+                      {format(
+                        new Date(diary.createdTime),
+                        "yyyy년 M월 d일 EEE",
+                        {
+                          locale: ko,
+                        }
+                      )}
+                      요일
+                    </p>
+                    <p className="border-b-2 text-lg border-gray-500">
+                      오늘날씨 {diary.weather}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="pb-1 text-lg">제목 : {diary.title}</p>
-                  <p>오늘날씨 {diary.weather}</p>
-                  <p>{diary.content}</p>
+                <div className="w-full">
+                  <p className="pb-1 text-xl border-b-2 border-gray-500">
+                    <strong>제목 : {diary.title}</strong>
+                  </p>
+
+                  <p className="border-b-2 text-lg border-gray-500">
+                    {diary.content}
+                  </p>
+                  <p className="border-b-2 text-lg border-gray-500 text-end">
+                    <strong>끄읏.</strong>
+                  </p>
                 </div>
               </DiaryDiv>
             );
           })}
 
       <div ref={fetchMoreRef} />
-      {isLoading && <FontSpan className="pt-5">일기를 쓰고있어요...</FontSpan>}
+      {(isLoading || isFetching) && (
+        <FontSpan className="pt-5">일기를 쓰고있어요...</FontSpan>
+      )}
       {!isLoading && !hasNextPage && (
         <p className="pt-5">🎉 모든 일기를 다 읽으셨어요.</p>
       )}

@@ -20,7 +20,7 @@ export const setAuthToken = ({
   if (refreshToken) {
     window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
-  apiClient.defaults.headers.common.Authorization = `${grantType} ${accessToken}`;
+  apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 };
 
 export const removeAuthToken = () => {
