@@ -10,11 +10,11 @@ export const REFRESH_TOKEN_KEY =
 export const setAuthToken = ({
   accessToken,
   refreshToken,
-  grantType,
+  grantType = "Bearer",
 }: {
   accessToken: string;
   refreshToken?: string;
-  grantType: string;
+  grantType?: string;
 }) => {
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   if (refreshToken) {
