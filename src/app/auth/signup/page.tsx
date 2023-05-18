@@ -69,9 +69,8 @@ export default function SignUp() {
                 {...register("password", {
                   required: "비밀번호를 입력해주세요",
                   pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                    message:
-                      "비밀번호는 4자에서 30자까지 최소 하나의 문자 및 하나의 숫자를 입력해주세요.",
+                    value: /^[\da-zA-Z!@#]{4,}$/,
+                    message: "비밀번호는 최소 4자 이상입니다.",
                   },
                 })}
                 type="password"
