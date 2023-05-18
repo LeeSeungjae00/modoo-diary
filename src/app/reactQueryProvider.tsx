@@ -14,7 +14,7 @@ export default function ReactQueryProvider({ children }: PropsWithChildren) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            refetchOnMount: false,
+            // refetchOnMount: false,
             refetchOnReconnect: false,
             // refetchOnWindowFocus: false,
           },
