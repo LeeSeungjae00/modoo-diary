@@ -18,6 +18,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<SignUpFormType>();
   const { mutate: signUp, isError } = useMutation({
     mutationFn: postSignUp,
@@ -88,6 +89,31 @@ export default function SignUp() {
             {errors.password && (
               <InputAlert
                 message={errors.password.message as string}
+              ></InputAlert>
+            )}
+            <div>
+              <Label htmlFor="passwordConfirmation">비밀번호 확인</Label>
+              <Input
+                {...register("passwordConfirmation", {
+                  required: "비밀번호를 확인해주세요",
+                  validate: {
+                    matchPreviousPassword: (value) => {
+                      const { password } = getValues();
+                      return (
+                        password === value || "비밀번호가 일치하지 않습니다"
+                      );
+                    },
+                  },
+                })}
+                type="password"
+                name="passwordConfirmation"
+                id="passwordConfirmation"
+                placeholder="••••••••"
+              />
+            </div>
+            {errors.passwordConfirmation && (
+              <InputAlert
+                message={errors.passwordConfirmation.message as string}
               ></InputAlert>
             )}
             <div>

@@ -5,6 +5,7 @@ export interface SignInFormType {
 export interface SignUpFormType extends SignInFormType {
   nickName: string;
   region: "SEOUL" | "BUSAN" | "INCHEON" | "ULSAN" | "GWANGJU";
+  passwordConfirmation: string;
 }
 export interface AccessTokenPayload {
   sub: string;
