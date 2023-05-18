@@ -56,7 +56,7 @@ export default function Write() {
           className="p-6 space-y-4 md:space-y-6 sm:p-8"
         >
           <FontH1 className=" text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white flex">
-            <p>제목:</p>
+            <p className="min-w-fit">제목:</p>
             <input
               {...register("title", {
                 required: "제목을 입력해 주세요",
