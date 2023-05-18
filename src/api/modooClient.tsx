@@ -27,7 +27,8 @@ apiClient.interceptors.response.use(
     if (
       refreshToken &&
       originalRequest._retry !== true &&
-      error.response.status === 401
+      error.response.status === 401 &&
+      !originalRequest.url.includes("/api/auth")
     ) {
       originalRequest._retry = true;
 
@@ -46,7 +47,7 @@ apiClient.interceptors.response.use(
         .post(API_ROUTE_AUTH_REISSUE, data)
         .then((res: AxiosResponse) => {
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-            res.data;
+            res.data.data;
 
           setAuthToken({
             accessToken: newAccessToken,
@@ -59,7 +60,7 @@ apiClient.interceptors.response.use(
         .catch(() => {
           removeAuthToken();
           delete apiClient.defaults.headers.common.Authorization;
-          window.location.href = "/";
+          window.location.href = "/auth/login";
 
           return Promise.reject(error);
         });
