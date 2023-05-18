@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthContextProvider>
           <Header></Header>
-          <div className="max-w-5xl mx-auto w-screen h-screen">
+          <div className="max-w-5xl mx-auto w-screen min-h-screen">
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </div>
         </AuthContextProvider>
