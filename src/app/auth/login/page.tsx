@@ -1,7 +1,7 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { postSignIn } from "@/api/auth";
@@ -18,9 +18,10 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
+
     formState: { errors },
   } = useForm<SignInFormType>();
-  const { mutate: signIn } = useMutation({
+  const { mutate: signIn, isError: dataFetchError } = useMutation({
     mutationFn: postSignIn,
     onSuccess: ({ data }) => {
       setAuthToken(data.data);
@@ -115,6 +116,9 @@ export default function SignIn() {
             >
               일기 쓰러 가기
             </button>
+            {dataFetchError && (
+              <InputAlert message="아이디와 비밀번호를 확인해 주세요."></InputAlert>
+            )}
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               계정이 없으신가요?{" "}
               <Link
