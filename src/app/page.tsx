@@ -33,6 +33,7 @@ const DiaryDiv = styled.div`
 
 const FontPre = styled.pre`
   font-family: Chilgok_lws;
+  white-space: pre-wrap;
 `;
 
 export default function Home() {
