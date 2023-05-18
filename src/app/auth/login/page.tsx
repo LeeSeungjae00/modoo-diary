@@ -74,9 +74,8 @@ export default function SignIn() {
                 {...register("password", {
                   required: "비밀번호를 입력해주세요",
                   pattern: {
-                    value: /^[a-z0-9@.]{4,30}$/,
-                    message:
-                      "비밀번호는 4자에서 30자까지 영어, 숫자, 특수문자로 이루어져야 합니다.",
+                    value: /^[\da-zA-Z!@#]{4,}$/,
+                    message: "비밀번호는 최소 4자 이상입니다.",
                   },
                 })}
                 type="password"
