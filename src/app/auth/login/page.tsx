@@ -5,12 +5,13 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { postSignIn } from "@/api/auth";
-import { SignInFormType } from "@/types/auth";
+import { AccessTokenPayload, SignInFormType } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import InputAlert from "@/components/common/inputAlert";
 import Link from "next/link";
 import { setAuthToken } from "@/lib/authUtill";
 import { AuthContext } from "@/context/authInfo.context";
+import jwtDecode from "jwt-decode";
 
 export default function SignIn() {
   const router = useRouter();
@@ -26,7 +27,8 @@ export default function SignIn() {
     onSuccess: ({ data }) => {
       setAuthToken(data.data);
       router.push("/");
-      dispatch({ type: "SIGNIN", payload: true });
+      const payload = jwtDecode<AccessTokenPayload>(data.data.accessToken);
+      dispatch({ type: "SIGNIN", payload });
     },
   });
 

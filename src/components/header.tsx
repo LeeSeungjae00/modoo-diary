@@ -64,11 +64,11 @@ export default function Header() {
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="font-bold text-lg flex">
             ✎
-            {state.isLogin
+            {state.isLogin?.nickName
               ? (
                   <FontSpan className="text-lg">
                     {" "}
-                    {getParsedToken()?.nickName}
+                    {state.isLogin.nickName}
                   </FontSpan>
                 ) || ""
               : " 모두"}

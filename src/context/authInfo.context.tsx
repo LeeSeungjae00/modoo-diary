@@ -1,10 +1,12 @@
 "use client";
 import apiClient from "@/api/modooClient";
 import { ACCESS_TOKEN_KEY } from "@/lib/authUtill";
+import { AccessTokenPayload } from "@/types/auth";
+import jwtDecode from "jwt-decode";
 import React, { Dispatch, createContext, useEffect, useReducer } from "react";
 
 type StateType = {
-  isLogin: boolean;
+  isLogin: AccessTokenPayload | undefined;
 };
 
 type ActionType<T> = {
@@ -13,15 +15,18 @@ type ActionType<T> = {
 };
 
 const initialState: StateType = {
-  isLogin: false,
+  isLogin: undefined,
 };
 
-const reducer = (state: StateType, action: ActionType<boolean>) => {
+const reducer = (
+  state: StateType,
+  action: ActionType<AccessTokenPayload | undefined>
+) => {
   switch (action.type) {
     case "SIGNIN":
       return { ...state, isLogin: action.payload };
     case "SIGNOOUT":
-      return { ...state, isLogin: false };
+      return { ...state, isLogin: undefined };
     default:
       return state;
   }
@@ -29,7 +34,7 @@ const reducer = (state: StateType, action: ActionType<boolean>) => {
 
 export const AuthContext = createContext<{
   state: StateType;
-  dispatch: Dispatch<ActionType<boolean>>;
+  dispatch: Dispatch<ActionType<AccessTokenPayload | undefined>>;
 }>({ state: initialState, dispatch: () => null });
 
 export const AuthContextProvider = ({
@@ -42,7 +47,8 @@ export const AuthContextProvider = ({
   useEffect(() => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (accessToken) {
-      dispatch({ type: "SIGNIN", payload: true });
+      const payload = jwtDecode<AccessTokenPayload>(accessToken);
+      dispatch({ type: "SIGNIN", payload });
     }
   }, []);
 
