@@ -31,6 +31,10 @@ const DiaryDiv = styled.div`
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 `;
 
+const FontPre = styled.pre`
+  font-family: Chilgok_lws;
+`;
+
 export default function Home() {
   const {
     data,
@@ -92,10 +96,9 @@ export default function Home() {
                   <p className="pb-1 text-xl border-b-2 border-gray-500">
                     <strong>제목 : {diary.title}</strong>
                   </p>
-
-                  <p className="border-b-2 text-lg border-gray-500">
+                  <FontPre className="border-b-2 text-lg border-gray-500">
                     {diary.content}
-                  </p>
+                  </FontPre>
                   <p className="border-b-2 text-lg border-gray-500 text-end">
                     <strong>끄읏.</strong>
                   </p>
