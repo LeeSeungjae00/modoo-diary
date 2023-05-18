@@ -23,6 +23,7 @@ apiClient.interceptors.response.use(
   (error) => {
     const originalRequest = error.config;
     const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     if (
       refreshToken &&
       originalRequest._retry !== true &&
@@ -30,14 +31,19 @@ apiClient.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      const config: AxiosRequestConfig = {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
+      // const config: AxiosRequestConfig = {
+      //   headers: {
+      //     Authorization: `Bearer ${refreshToken}`,
+      //   },
+      // };
+
+      const data = {
+        refreshToken,
+        accessToken,
       };
 
       return apiClient
-        .post(API_ROUTE_AUTH_REISSUE, null, config)
+        .post(API_ROUTE_AUTH_REISSUE, data)
         .then((res: AxiosResponse) => {
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
             res.data;
@@ -53,6 +59,7 @@ apiClient.interceptors.response.use(
         .catch(() => {
           removeAuthToken();
           delete apiClient.defaults.headers.common.Authorization;
+          window.location.href = "/";
 
           return Promise.reject(error);
         });

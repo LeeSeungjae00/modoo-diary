@@ -58,7 +58,7 @@ export default function Home() {
     if (!intersecting || !isSuccess || !hasNextPage || isFetchingNextPage)
       return;
     fetchNextPage();
-  }, [intersecting]);
+  }, [fetchNextPage, hasNextPage, intersecting, isFetchingNextPage, isSuccess]);
 
   return (
     <main className="flex min-h-screen max-w-screen-lg flex-col items-center p-8 pt-28 ">
