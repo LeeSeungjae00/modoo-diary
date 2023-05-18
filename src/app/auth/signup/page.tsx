@@ -1,7 +1,7 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { postSignUp } from "@/api/auth";
@@ -9,18 +9,24 @@ import { SignUpFormType } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import InputAlert from "@/components/common/inputAlert";
 import Radio from "@/components/common/radio";
+import { AxiosError } from "axios";
 
 export default function SignUp() {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormType>();
-  const { mutate: signUp } = useMutation({
+  const { mutate: signUp, isError } = useMutation({
     mutationFn: postSignUp,
     onSuccess: () => {
       router.push("/auth/login");
+    },
+    onError: (error: any) => {
+      // console.log();
+      setErrorMessage(error?.response?.data.error.code || "");
     },
   });
 
@@ -162,6 +168,7 @@ export default function SignUp() {
             >
               회원가입 하고 로그인 하러 가기
             </button>
+            {errorMessage && <InputAlert message={errorMessage}></InputAlert>}
           </form>
         </div>
       </div>
