@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   title: "모두의 일기",
   description: "모두 다같이 일기를 작성해봐요.",
   openGraph: {
-    images: "/images/welldone.png",
+    title: "모두의 일기",
+    images: "/static/images/welldone.png",
     description: "모두 다같이 일기를 작성해봐요.",
     url: "https://modoo-diary.vercel.app/",
   },
