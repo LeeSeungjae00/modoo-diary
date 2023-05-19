@@ -34,6 +34,7 @@ const LocalNav = styled.nav<{ isSticky: boolean }>`
 `;
 
 export default function Header() {
+  const router = useRouter();
   const { state, dispatch } = useContext(AuthContext);
   const [isSticky, setIsSticky] = useState(false);
   const onScroll = useCallback(() => {
@@ -54,6 +55,7 @@ export default function Header() {
   }, [onScroll]);
 
   const logout = () => {
+    router.push("/");
     removeAuthToken();
     dispatch({ type: "SIGNOOUT", payload: undefined });
   };
