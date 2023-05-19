@@ -55,7 +55,7 @@ export default function Header() {
 
   const logout = () => {
     removeAuthToken();
-    dispatch({ type: "SIGNOOUT", payload: true });
+    dispatch({ type: "SIGNOOUT", payload: undefined });
   };
 
   return (

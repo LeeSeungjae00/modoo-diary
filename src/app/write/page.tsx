@@ -22,7 +22,7 @@ const FontTextarea = styled.textarea`
   }
 `;
 
-const FontButton = styled.button`
+export const FontButton = styled.button`
   font-family: Chilgok_lws;
   font-size: 1.5rem;
   :hover {

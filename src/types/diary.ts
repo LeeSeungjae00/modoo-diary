@@ -1,4 +1,33 @@
+import { AccessTokenPayload } from "./auth";
+
 export interface DiaryType {
   title: string;
-  content?: string;
+  content: string;
+}
+
+export interface DiaryDivType extends DiaryType {
+  id: number;
+  nickName: string;
+  createdTime: string;
+  weather: string;
+  title: string;
+  content: string;
+  isLogin: AccessTokenPayload | undefined;
+}
+
+export interface InfinitiScrollDataType<T> {
+  number: number;
+  totalPages: number;
+  data: T[];
+}
+
+export interface DiaryPageType {
+  id: number;
+  nickName: string;
+  title: string;
+  weather: string;
+  content: string;
+  recommendCount: number;
+  createdTime: string;
+  updatedTime: string;
 }
