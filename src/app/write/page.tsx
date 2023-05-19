@@ -2,13 +2,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import { postSignUp } from "@/api/auth";
-import { SignUpFormType } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import { DiaryType } from "@/types/diary";
 import InputAlert from "@/components/common/inputAlert";
 import { postDiary } from "@/api/diary";
+import FontButton from "@/components/common/fontButton";
 
 const FontH1 = styled.h1`
   font-family: Chilgok_lws;
@@ -19,14 +18,6 @@ const FontTextarea = styled.textarea`
   font-size: 1.5rem;
   ::placeholder {
     font-size: 1.5rem;
-  }
-`;
-
-export const FontButton = styled.button`
-  font-family: Chilgok_lws;
-  font-size: 1.5rem;
-  :hover {
-    background-color: #f0f0f0;
   }
 `;
 

@@ -1,4 +1,3 @@
-import { FontButton } from "@/app/write/page";
 import {
   DiaryDivType,
   DiaryPageType,
@@ -14,6 +13,7 @@ import { useForm } from "react-hook-form";
 import InputAlert from "./common/inputAlert";
 import { deletedDiary, patchDiary } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
+import FontButton from "./common/fontButton";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
