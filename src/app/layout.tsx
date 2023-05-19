@@ -4,12 +4,19 @@ import { Inter } from "next/font/google";
 import Header from "@/components/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { AuthContextProvider } from "@/context/authInfo.context";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "modoo diary",
-  description: "모두의 다이어리",
+export const metadata: Metadata = {
+  title: "모두의 일기",
+  description: "모두 다같이 일기를 작성해봐요.",
+  openGraph: {
+    title: "모두의 일기",
+    images: "/static/images/welldone.png",
+    description: "모두 다같이 일기를 작성해봐요.",
+    url: "https://modoo-diary.vercel.app/",
+  },
 };
 
 export default function RootLayout({
@@ -19,10 +26,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description}></meta>
-      </Head>
       <body className={inter.className}>
         <AuthContextProvider>
           <Header></Header>

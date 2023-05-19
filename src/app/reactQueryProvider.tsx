@@ -15,6 +15,7 @@ export default function ReactQueryProvider({ children }: PropsWithChildren) {
         defaultOptions: {
           queries: {
             refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
           },
         },
       })

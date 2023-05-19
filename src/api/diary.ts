@@ -23,12 +23,12 @@ export const getDiarys = (offset: number) => {
 };
 
 export const postDiary = (diary: DiaryType) => {
-  const memberId = getParsedToken()?.sub;
+  const memberId = Number(getParsedToken()?.sub);
   return apiClient.post(API_ROUTE_DIARIES_POST, { ...diary, memberId });
 };
 
 export const patchDiary = (diary: DiaryType & { diaryId: number }) => {
-  const memberId = getParsedToken()?.sub;
+  const memberId = Number(getParsedToken()?.sub);
 
   const data = {
     title: diary.title,
