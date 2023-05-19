@@ -12,7 +12,7 @@ import { ko } from "date-fns/locale";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputAlert from "./common/inputAlert";
-import { patchDiary, postDiary } from "@/api/diary";
+import { deletedDiary, patchDiary } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 
 const DiaryCard = styled.div`
@@ -48,16 +48,17 @@ export default React.memo(function DiaryDiv({
   isLogin,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
+  const [confilmDelete, setConfilmDelete] = useState(false);
   const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<DiaryType>();
-  const { mutate: write, isLoading } = useMutation({
+  const { mutate: write } = useMutation({
     mutationFn: patchDiary,
-    onMutate: (data) => {
-      queryClient.invalidateQueries([API_ROUTE_DIARIES_GET]);
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
 
       const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
 
@@ -102,8 +103,57 @@ export default React.memo(function DiaryDiv({
 
       return { previous };
     },
+    onError: (_error, _, context) => {
+      queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
+    },
     onSuccess: () => {
+      queryClient.invalidateQueries([API_ROUTE_DIARIES_GET]);
       setIsWrite(false);
+    },
+  });
+
+  const { mutate: remove } = useMutation({
+    mutationFn: deletedDiary,
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
+
+      const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
+
+      queryClient.setQueryData<{
+        pageParams: undefined | number[];
+        pages: InfinitiScrollDataType<DiaryPageType>[];
+      }>([API_ROUTE_DIARIES_GET], (old) => {
+        if (old) {
+          const { pageParams, pages } = old;
+
+          const newPages = pages.map((page) => {
+            const findedIndex = page.data.findIndex((val) => val.id === data);
+
+            if (findedIndex > -1) {
+              const newdata = page.data.filter((val) => val.id !== data);
+
+              return {
+                ...page,
+                data: newdata,
+              };
+            }
+            return page;
+          });
+
+          return {
+            pageParams,
+            pages: newPages,
+          };
+        }
+      });
+
+      return { previous };
+    },
+    onError: (_error, _, context) => {
+      queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([API_ROUTE_DIARIES_GET]);
     },
   });
 
@@ -144,9 +194,25 @@ export default React.memo(function DiaryDiv({
                   >
                     ✏️
                   </button>
-                  <button className="h-fit px-2 border-l-2" title="삭제">
-                    ❌
-                  </button>
+                  {confilmDelete ? (
+                    <p>
+                      진짜로 지울거에요?{" "}
+                      <button onClick={() => remove(id)}>예</button> /{" "}
+                      <button onClick={() => setConfilmDelete(false)}>
+                        아니오
+                      </button>
+                    </p>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setConfilmDelete(true);
+                      }}
+                      className="h-fit px-2 border-l-2"
+                      title="삭제"
+                    >
+                      ❌
+                    </button>
+                  )}
                 </>
               )}
             </>

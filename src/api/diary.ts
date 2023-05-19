@@ -1,4 +1,5 @@
 import {
+  API_ROUTE_DIARIES_DELETE,
   API_ROUTE_DIARIES_GET,
   API_ROUTE_DIARIES_PATCH,
   API_ROUTE_DIARIES_POST,
@@ -38,5 +39,11 @@ export const patchDiary = (diary: DiaryType & { diaryId: number }) => {
   return apiClient.patch(
     API_ROUTE_DIARIES_PATCH.replace(":id", diary.diaryId.toString()),
     data
+  );
+};
+
+export const deletedDiary = (diaryId: number) => {
+  return apiClient.delete(
+    API_ROUTE_DIARIES_DELETE.replace(":id", diaryId.toString())
   );
 };
