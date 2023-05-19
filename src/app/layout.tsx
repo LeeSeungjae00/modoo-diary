@@ -22,6 +22,16 @@ export default function RootLayout({
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description}></meta>
+        <meta property="og:image" content="/images/welldone.png"></meta>
+        <meta property="og:title" content="모두의 일기"></meta>
+        <meta
+          property="og:description"
+          content="모두 다같이 일기를 작성해봐요"
+        />
+        <meta
+          property="og:url"
+          content="https://modoo-diary.vercel.app/"
+        ></meta>
       </Head>
       <body className={inter.className}>
         <AuthContextProvider>
