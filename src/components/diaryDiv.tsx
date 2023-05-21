@@ -31,11 +31,40 @@ const DiaryCard = styled.div`
     0 1px 2px -1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  position: relative;
+  padding-bottom: 1.5rem;
 `;
 
 const FontPre = styled.pre`
   font-family: Chilgok_lws;
   white-space: pre-wrap;
+`;
+
+const WellDoneButton = styled.button`
+  background-image: url("/static/images/welldone-removebg-preview.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  background-color: transparent;
+  &:hover {
+    background-color: #a8a8a8c2;
+  }
+  &:active {
+    width: 3.8rem;
+    height: 3.8rem;
+    margin: 0.1rem;
+  }
+`;
+
+const WellDoneDiv = styled.div`
+  position: absolute;
+  transition: rotate(45deg);
+  transform: rotate(342deg);
+  display: flex;
+  bottom: 0.5rem;
+  right: 1.5rem;
 `;
 
 export default React.memo(function DiaryDiv({
@@ -46,6 +75,7 @@ export default React.memo(function DiaryDiv({
   title,
   content,
   isLogin,
+  recommendCount,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
   const [confilmDelete, setConfilmDelete] = useState(false);
@@ -284,6 +314,9 @@ export default React.memo(function DiaryDiv({
           <p className="border-b-2 text-lg border-gray-500 text-end">
             <strong>끄읏.</strong>
           </p>
+          <WellDoneDiv>
+            <WellDoneButton></WellDoneButton>x {recommendCount}
+          </WellDoneDiv>
         </div>
       )}
     </DiaryCard>

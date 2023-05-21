@@ -1,6 +1,7 @@
 import {
   API_ROUTE_DIARIES_DELETE,
   API_ROUTE_DIARIES_GET,
+  API_ROUTE_DIARIES_LIKE_PUT,
   API_ROUTE_DIARIES_PATCH,
   API_ROUTE_DIARIES_POST,
 } from "@/constants/api/diary";
@@ -46,4 +47,15 @@ export const deletedDiary = (diaryId: number) => {
   return apiClient.delete(
     API_ROUTE_DIARIES_DELETE.replace(":id", diaryId.toString())
   );
+};
+
+export const putDiaryLike = (diaryId: number) => {
+  const memberId = Number(getParsedToken()?.sub);
+
+  const data = {
+    memberId,
+    diaryId,
+  };
+
+  return apiClient.put(API_ROUTE_DIARIES_LIKE_PUT, data);
 };

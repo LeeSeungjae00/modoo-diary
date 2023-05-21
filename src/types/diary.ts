@@ -13,6 +13,7 @@ export interface DiaryDivType extends DiaryType {
   title: string;
   content: string;
   isLogin: AccessTokenPayload | undefined;
+  recommendCount: number;
 }
 
 export interface InfinitiScrollDataType<T> {
