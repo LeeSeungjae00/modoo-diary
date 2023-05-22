@@ -237,7 +237,7 @@ export default React.memo(function DiaryDiv({
         >
           <p className="pb-1 text-xl border-gray-500">
             <strong className="flex">
-              제목 :
+              <p className="min-w-fit">제목 :</p>
               <input
                 {...register("title", {
                   required: "제목을 입력해 주세요",
