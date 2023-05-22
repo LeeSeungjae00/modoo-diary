@@ -43,6 +43,7 @@ export default function Write() {
         ...data,
         ...coordinate.coordinates,
       });
+      return;
     }
     write(data);
   }
