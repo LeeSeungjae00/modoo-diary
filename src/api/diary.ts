@@ -52,10 +52,13 @@ export const deletedDiary = (diaryId: number) => {
 export const putDiaryLike = (diaryId: number) => {
   const memberId = Number(getParsedToken()?.sub);
 
-  const data = {
-    memberId,
-    diaryId,
+  const config = {
+    params: {
+      memberId,
+      diaryId,
+      recommendYn: "Y",
+    },
   };
 
-  return apiClient.put(API_ROUTE_DIARIES_LIKE_PUT, data);
+  return apiClient.put(API_ROUTE_DIARIES_LIKE_PUT, null, config);
 };

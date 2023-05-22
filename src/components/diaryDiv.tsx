@@ -11,7 +11,7 @@ import { ko } from "date-fns/locale";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputAlert from "./common/inputAlert";
-import { deletedDiary, patchDiary } from "@/api/diary";
+import { deletedDiary, patchDiary, putDiaryLike } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import FontButton from "./common/fontButton";
 
@@ -85,6 +85,72 @@ export default React.memo(function DiaryDiv({
     handleSubmit,
     formState: { errors },
   } = useForm<DiaryType>();
+  const { mutate: like } = useMutation({
+    mutationFn: putDiaryLike,
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
+
+      const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
+
+      queryClient.setQueryData<{
+        pageParams: undefined | number[];
+        pages: InfinitiScrollDataType<DiaryPageType>[];
+      }>([API_ROUTE_DIARIES_GET], (old) => {
+        if (old) {
+          const { pageParams, pages } = old;
+
+          const newPages = pages.map((page) => {
+            const findedIndex = page.data.findIndex((val) => val.id === data);
+
+            if (findedIndex > -1) {
+              const newdata = page.data.map((val) => {
+                if (val.id === data) {
+                  return {
+                    ...val,
+                    recommendCount: ++val.recommendCount,
+                  };
+                }
+                return val;
+              });
+
+              return {
+                ...page,
+                data: newdata,
+              };
+            }
+            return page;
+          });
+
+          return {
+            pageParams,
+            pages: newPages,
+          };
+        }
+      });
+
+      return { previous };
+    },
+    onError: (_error, _, context) => {
+      queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE_DIARIES_GET],
+        refetchPage: (
+          lastPage,
+          index,
+          allPages: InfinitiScrollDataType<DiaryPageType>[]
+        ) => {
+          const refetchIndex = allPages.findIndex(
+            (val) => val.data.findIndex((val) => val.id === id) !== -1
+          );
+          console.log(refetchIndex);
+          return index === refetchIndex;
+        },
+      });
+    },
+  });
+
   const { mutate: write } = useMutation({
     mutationFn: patchDiary,
     onMutate: async (data) => {
@@ -137,8 +203,22 @@ export default React.memo(function DiaryDiv({
       queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([API_ROUTE_DIARIES_GET]);
       setIsWrite(false);
+
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE_DIARIES_GET],
+        refetchPage: (
+          lastPage,
+          index,
+          allPages: InfinitiScrollDataType<DiaryPageType>[]
+        ) => {
+          const refetchIndex = allPages.findIndex(
+            (val) => val.data.findIndex((val) => val.id === id) !== -1
+          );
+          console.log(refetchIndex);
+          return index === refetchIndex;
+        },
+      });
     },
   });
 
@@ -191,6 +271,10 @@ export default React.memo(function DiaryDiv({
     write({ ...data, diaryId: id });
   }
 
+  function onClickWellDoneButton(diaryId: number) {
+    like(diaryId);
+  }
+
   return (
     <DiaryCard key={id}>
       <div className="flex justify-between w-full">
@@ -226,7 +310,7 @@ export default React.memo(function DiaryDiv({
                   </button>
                   {confilmDelete ? (
                     <p>
-                      진짜로 지울거에요?{" "}
+                      진짜로 지울거예요?{" "}
                       <button onClick={() => remove(id)}>예</button> /{" "}
                       <button onClick={() => setConfilmDelete(false)}>
                         아니오
@@ -315,7 +399,8 @@ export default React.memo(function DiaryDiv({
             <strong>끄읏.</strong>
           </p>
           <WellDoneDiv>
-            <WellDoneButton></WellDoneButton>x {recommendCount}
+            <WellDoneButton onClick={() => like(id)}></WellDoneButton>x{" "}
+            {recommendCount}
           </WellDoneDiv>
         </div>
       )}
