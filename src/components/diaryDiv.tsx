@@ -11,9 +11,10 @@ import { ko } from "date-fns/locale";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputAlert from "./common/inputAlert";
-import { deletedDiary, patchDiary } from "@/api/diary";
+import { deletedDiary, patchDiary, putDiaryLike } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import FontButton from "./common/fontButton";
+import { useRouter } from "next/navigation";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
@@ -31,11 +32,40 @@ const DiaryCard = styled.div`
     0 1px 2px -1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  position: relative;
+  padding-bottom: 1.5rem;
 `;
 
 const FontPre = styled.pre`
   font-family: Chilgok_lws;
   white-space: pre-wrap;
+`;
+
+const WellDoneButton = styled.button`
+  background-image: url("/static/images/welldone-removebg-preview.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  background-color: transparent;
+  &:hover {
+    background-color: #a8a8a8c2;
+  }
+  &:active {
+    width: 3.8rem;
+    height: 3.8rem;
+    margin: 0.1rem;
+  }
+`;
+
+const WellDoneDiv = styled.div`
+  position: absolute;
+  transition: rotate(45deg);
+  transform: rotate(342deg);
+  display: flex;
+  bottom: 0.5rem;
+  right: 1.5rem;
 `;
 
 export default React.memo(function DiaryDiv({
@@ -46,15 +76,83 @@ export default React.memo(function DiaryDiv({
   title,
   content,
   isLogin,
+  recommendCount,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
   const [confilmDelete, setConfilmDelete] = useState(false);
   const queryClient = useQueryClient();
+  const route = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<DiaryType>();
+  const { mutate: like, isLoading: isLoadingLike } = useMutation({
+    mutationFn: putDiaryLike,
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
+
+      const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
+
+      queryClient.setQueryData<{
+        pageParams: undefined | number[];
+        pages: InfinitiScrollDataType<DiaryPageType>[];
+      }>([API_ROUTE_DIARIES_GET], (old) => {
+        if (old) {
+          const { pageParams, pages } = old;
+
+          const newPages = pages.map((page) => {
+            const findedIndex = page.data.findIndex((val) => val.id === data);
+
+            if (findedIndex > -1) {
+              const newdata = page.data.map((val) => {
+                if (val.id === data) {
+                  return {
+                    ...val,
+                    recommendCount: ++val.recommendCount,
+                  };
+                }
+                return val;
+              });
+
+              return {
+                ...page,
+                data: newdata,
+              };
+            }
+            return page;
+          });
+
+          return {
+            pageParams,
+            pages: newPages,
+          };
+        }
+      });
+
+      return { previous };
+    },
+    onError: (_error, _, context) => {
+      queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE_DIARIES_GET],
+        refetchPage: (
+          lastPage,
+          index,
+          allPages: InfinitiScrollDataType<DiaryPageType>[]
+        ) => {
+          const refetchIndex = allPages.findIndex(
+            (val) => val.data.findIndex((val) => val.id === id) !== -1
+          );
+          console.log(refetchIndex);
+          return index === refetchIndex;
+        },
+      });
+    },
+  });
+
   const { mutate: write } = useMutation({
     mutationFn: patchDiary,
     onMutate: async (data) => {
@@ -107,8 +205,22 @@ export default React.memo(function DiaryDiv({
       queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries([API_ROUTE_DIARIES_GET]);
       setIsWrite(false);
+
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE_DIARIES_GET],
+        refetchPage: (
+          lastPage,
+          index,
+          allPages: InfinitiScrollDataType<DiaryPageType>[]
+        ) => {
+          const refetchIndex = allPages.findIndex(
+            (val) => val.data.findIndex((val) => val.id === id) !== -1
+          );
+          console.log(refetchIndex);
+          return index === refetchIndex;
+        },
+      });
     },
   });
 
@@ -161,6 +273,14 @@ export default React.memo(function DiaryDiv({
     write({ ...data, diaryId: id });
   }
 
+  function onClickWellDone(diaryId: number) {
+    if (isLogin) {
+      like(diaryId);
+    } else {
+      route.push("/auth/login");
+    }
+  }
+
   return (
     <DiaryCard key={id}>
       <div className="flex justify-between w-full">
@@ -196,7 +316,7 @@ export default React.memo(function DiaryDiv({
                   </button>
                   {confilmDelete ? (
                     <p>
-                      진짜로 지울거에요?{" "}
+                      진짜로 지울거예요?{" "}
                       <button onClick={() => remove(id)}>예</button> /{" "}
                       <button onClick={() => setConfilmDelete(false)}>
                         아니오
@@ -284,6 +404,13 @@ export default React.memo(function DiaryDiv({
           <p className="border-b-2 text-lg border-gray-500 text-end">
             <strong>끄읏.</strong>
           </p>
+          <WellDoneDiv>
+            <WellDoneButton
+              disabled={isLoadingLike}
+              onClick={() => onClickWellDone(id)}
+            ></WellDoneButton>
+            x {recommendCount}
+          </WellDoneDiv>
         </div>
       )}
     </DiaryCard>
