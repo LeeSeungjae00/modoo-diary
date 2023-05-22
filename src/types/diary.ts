@@ -5,6 +5,12 @@ export interface DiaryType {
   content: string;
 }
 
+export interface DiaryWriteType extends DiaryType {
+  weather?: number;
+  lx?: number;
+  ly?: number;
+}
+
 export interface DiaryDivType extends DiaryType {
   id: number;
   nickName: string;
