@@ -5,7 +5,7 @@ import {
   API_ROUTE_DIARIES_POST,
 } from "@/constants/api/diary";
 import apiClient from "./modooClient";
-import { DiaryType } from "@/types/diary";
+import { DiaryType, DiaryWriteType } from "@/types/diary";
 import { getParsedToken } from "@/lib/authUtill";
 
 export const getDiarys = (offset: number) => {
@@ -22,7 +22,7 @@ export const getDiarys = (offset: number) => {
   }));
 };
 
-export const postDiary = (diary: DiaryType) => {
+export const postDiary = (diary: DiaryWriteType) => {
   const memberId = Number(getParsedToken()?.sub);
   return apiClient.post(API_ROUTE_DIARIES_POST, { ...diary, memberId });
 };
