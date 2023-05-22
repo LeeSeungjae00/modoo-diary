@@ -85,7 +85,7 @@ export default React.memo(function DiaryDiv({
     handleSubmit,
     formState: { errors },
   } = useForm<DiaryType>();
-  const { mutate: like } = useMutation({
+  const { mutate: like, isLoading: isLoadingLike } = useMutation({
     mutationFn: putDiaryLike,
     onMutate: async (data) => {
       await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
@@ -271,10 +271,6 @@ export default React.memo(function DiaryDiv({
     write({ ...data, diaryId: id });
   }
 
-  function onClickWellDoneButton(diaryId: number) {
-    like(diaryId);
-  }
-
   return (
     <DiaryCard key={id}>
       <div className="flex justify-between w-full">
@@ -399,8 +395,11 @@ export default React.memo(function DiaryDiv({
             <strong>끄읏.</strong>
           </p>
           <WellDoneDiv>
-            <WellDoneButton onClick={() => like(id)}></WellDoneButton>x{" "}
-            {recommendCount}
+            <WellDoneButton
+              disabled={isLoadingLike}
+              onClick={() => like(id)}
+            ></WellDoneButton>
+            x {recommendCount}
           </WellDoneDiv>
         </div>
       )}
