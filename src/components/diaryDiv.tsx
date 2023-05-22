@@ -14,6 +14,7 @@ import InputAlert from "./common/inputAlert";
 import { deletedDiary, patchDiary, putDiaryLike } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import FontButton from "./common/fontButton";
+import { useRouter } from "next/navigation";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
@@ -80,6 +81,7 @@ export default React.memo(function DiaryDiv({
   const [isWrite, setIsWrite] = useState(false);
   const [confilmDelete, setConfilmDelete] = useState(false);
   const queryClient = useQueryClient();
+  const route = useRouter();
   const {
     register,
     handleSubmit,
@@ -271,6 +273,14 @@ export default React.memo(function DiaryDiv({
     write({ ...data, diaryId: id });
   }
 
+  function onClickWellDone(diaryId: number) {
+    if (isLogin) {
+      like(diaryId);
+    } else {
+      route.push("/auth/login");
+    }
+  }
+
   return (
     <DiaryCard key={id}>
       <div className="flex justify-between w-full">
@@ -397,7 +407,7 @@ export default React.memo(function DiaryDiv({
           <WellDoneDiv>
             <WellDoneButton
               disabled={isLoadingLike}
-              onClick={() => like(id)}
+              onClick={() => onClickWellDone(id)}
             ></WellDoneButton>
             x {recommendCount}
           </WellDoneDiv>
