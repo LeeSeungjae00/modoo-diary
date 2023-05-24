@@ -14,7 +14,7 @@ const apiClient = axios.create();
 apiClient.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 if (typeof window !== "undefined") {
   apiClient.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-    ACCESS_TOKEN_KEY
+    "access_token"
   )}`;
 }
 
@@ -31,12 +31,6 @@ apiClient.interceptors.response.use(
       !originalRequest.url.includes("/api/auth")
     ) {
       originalRequest._retry = true;
-
-      // const config: AxiosRequestConfig = {
-      //   headers: {
-      //     Authorization: `Bearer ${refreshToken}`,
-      //   },
-      // };
 
       const data = {
         refreshToken,
