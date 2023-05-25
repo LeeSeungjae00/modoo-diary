@@ -23,4 +23,9 @@
 |  ⬜️  | 화면 무한스크롤 첫 페이지는 ssr |
 |  ⬜️  | SEO 작업                        |
 |  ⬜️  | 스티커 추가                     |
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+|  ⬜️  | 가상 스크롤                     |
+|  ⬜️  | 그림일기                        |
 >>>>>>> Stashed changes
