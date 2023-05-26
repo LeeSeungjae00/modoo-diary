@@ -31,8 +31,13 @@ const DiaryCard = styled.div`
 `;
 
 const DateLabel = styled.p`
-  &:hover:after {
-    content: attr(data-time);
+  
+  :hover{
+    font-size: 0px;
+    :after {
+      content: attr(data-time);
+      font-size: initial;
+    }
   }
 `
 
