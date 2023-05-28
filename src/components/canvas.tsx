@@ -48,7 +48,7 @@ export default function Canvas() {
     <div className="max-w-full w-full">
       <div className="max-w-full">
         <canvas
-          className="m-auto border-gray-500 border-2"
+          className="m-auto border-gray-300 border-2"
           ref={canvasRef}
           onMouseDown={() => setPainting(true)}
           onMouseUp={() => setPainting(false)}
