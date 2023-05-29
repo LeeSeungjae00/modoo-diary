@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import { postDiary } from "@/api/diary";
 import FontButton from "@/components/common/fontButton";
 import useCoordinate from "@/hooks/useCoordinate";
 import Canvas from "@/components/canvas";
+import axios from "axios";
 
 const FontH1 = styled.h1`
   font-family: Chilgok_lws;
@@ -24,6 +25,7 @@ const FontTextarea = styled.textarea`
 `;
 
 export default function Write() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawAble, setIsDrawAble] = useState(false);
   const router = useRouter();
   const {
@@ -48,6 +50,20 @@ export default function Write() {
       return;
     }
     write(data);
+  }
+
+  function saveDrawImage() {
+    canvasRef.current?.toBlob(function (blob) {
+      if (blob) {
+        const formData = new FormData();
+        formData.append("image", blob, "draw-image.png");
+
+        axios.post(
+          `https://api.imgbb.com/1/upload?expiration=15552000&key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_TOKEN}`,
+          formData
+        );
+      }
+    });
   }
 
   return (
@@ -88,7 +104,7 @@ export default function Write() {
                   message={errors.title.message as string}
                 ></InputAlert>
               )}
-              {isDrawAble && <Canvas></Canvas>}
+              {isDrawAble && <Canvas canvasRef={canvasRef}></Canvas>}
               <FontTextarea
                 {...register("content")}
                 placeholder="나는 오늘 일기를 썻다. 재미썻다. 다음에도 또 써야지."

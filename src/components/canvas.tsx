@@ -2,9 +2,12 @@
 import React, { useRef, useEffect, useState } from "react";
 // style
 
-export default function Canvas() {
+export default function Canvas({
+  canvasRef,
+}: {
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+}) {
   // useRef
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   // getCtx
   const [getCtx, setGetCtx] = useState<CanvasRenderingContext2D | null>(null);
   // painting state
@@ -24,7 +27,7 @@ export default function Canvas() {
         setGetCtx(ctx);
       }
     }
-  }, []);
+  }, [canvasRef]);
 
   const drawFn = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     // mouse position
@@ -41,8 +44,6 @@ export default function Canvas() {
       }
     }
   };
-
-  console.log(canvasRef);
 
   return (
     <div className="max-w-full w-full">
