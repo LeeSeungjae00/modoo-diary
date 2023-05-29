@@ -11,6 +11,7 @@ import FontButton from "@/components/common/fontButton";
 import useCoordinate from "@/hooks/useCoordinate";
 import Canvas from "@/components/canvas";
 import axios from "axios";
+import dataURItoBlob from "@/lib/dataURItoBlob";
 
 const FontH1 = styled.h1`
   font-family: Chilgok_lws;
@@ -52,18 +53,17 @@ export default function Write() {
     write(data);
   }
 
-  function saveDrawImage() {
-    canvasRef.current?.toBlob(function (blob) {
-      if (blob) {
-        const formData = new FormData();
-        formData.append("image", blob, "draw-image.png");
+  async function uploadCanvasData() {
+    if (canvasRef.current) {
+      const bb = dataURItoBlob(canvasRef.current?.toDataURL());
+      var formData = new FormData();
+      formData.append("image", bb);
 
-        axios.post(
-          `https://api.imgbb.com/1/upload?expiration=15552000&key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_TOKEN}`,
-          formData
-        );
-      }
-    });
+      await axios.post(
+        `https://api.imgbb.com/1/upload?expiration=15552000&key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_TOKEN}`,
+        formData
+      );
+    }
   }
 
   return (
@@ -72,6 +72,7 @@ export default function Write() {
         <FontH1>참 잘했어요</FontH1>
       ) : (
         <>
+          <button onClick={uploadCanvasData}>sdsdfsd</button>
           <label className="relative inline-flex items-center cursor-pointer mb-2">
             <input
               type="checkbox"
