@@ -8,3 +8,7 @@
   font-weight: 400;
   font-style: normal;
 }
+
+body.no-scroll {
+  overflow: hidden !important;
+}

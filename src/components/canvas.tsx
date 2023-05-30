@@ -58,8 +58,6 @@ export default function Canvas({
   };
 
   const drawMobileFn = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
     const { x, y } = getMousePos(canvasRef, e);
     const mouseX = x;
     const mouseY = y;
@@ -91,13 +89,11 @@ export default function Canvas({
             onMouseLeave={() => setPainting(false)}
             onMouseMove={drawFn}
             onTouchStart={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+              document.body.style.overflow = "hidden";
               setPainting(true);
             }}
             onTouchEnd={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+              document.body.style.overflow = "auto";
               setPainting(false);
             }}
             onTouchMove={drawMobileFn}
