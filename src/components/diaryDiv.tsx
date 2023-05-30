@@ -9,6 +9,8 @@ import EditButtons from "./editButtons";
 import useRemoveMutation from "@/hooks/mutations/useRemoveMutation";
 import UpdateDiaryForm from "./updateDiaryForm";
 import WellDoneButton from "./wellDoneButton";
+import Image from "next/image";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./canvas";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
@@ -49,6 +51,7 @@ export default React.memo(function DiaryDiv({
   content,
   isLogin,
   recommendCount,
+  drawing,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
 
@@ -107,9 +110,22 @@ export default React.memo(function DiaryDiv({
         ></UpdateDiaryForm>
       ) : (
         <div className="w-full">
+          {drawing && (
+            <Image
+              className="mx-auto border-gray-500 border-2 my-2"
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP0dPesBwADFAFamsrLhQAAAABJRU5ErkJggg=="
+              src={drawing.displayUrl}
+              alt={title}
+            ></Image>
+          )}
+
           <p className="pb-1 text-xl border-b-2 border-gray-500">
             <strong>제목 : {title}</strong>
           </p>
+
           <strong>
             <FontPre className="border-b-2 text-lg border-gray-500">
               {content}

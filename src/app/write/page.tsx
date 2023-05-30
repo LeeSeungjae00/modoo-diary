@@ -55,7 +55,7 @@ export default function Write() {
       const canvasData = await uploadCanvasData();
       resp = {
         ...resp,
-        ...canvasData,
+        drawing: canvasData,
       };
     }
     write(resp);
@@ -86,7 +86,6 @@ export default function Write() {
         <FontH1>참 잘했어요</FontH1>
       ) : (
         <>
-          <button onClick={uploadCanvasData}>sdsdfsd</button>
           <label className="relative inline-flex items-center cursor-pointer mb-2">
             <input
               type="checkbox"
@@ -119,7 +118,11 @@ export default function Write() {
                   message={errors.title.message as string}
                 ></InputAlert>
               )}
-              {isDrawAble && <Canvas canvasRef={canvasRef}></Canvas>}
+              {isDrawAble && (
+                <div className="flex flex-col justify-center mt-1">
+                  <Canvas canvasRef={canvasRef}></Canvas>
+                </div>
+              )}
               <FontTextarea
                 {...register("content")}
                 placeholder="나는 오늘 일기를 썻다. 재미썻다. 다음에도 또 써야지."
@@ -127,7 +130,7 @@ export default function Write() {
               ></FontTextarea>
               <FontButton
                 type="submit"
-                className="w-full text-blue-800 bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-blue-800 bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 끄읏.
               </FontButton>

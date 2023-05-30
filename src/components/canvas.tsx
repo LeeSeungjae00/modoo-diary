@@ -1,6 +1,10 @@
 // react
 import React, { useRef, useEffect, useState } from "react";
+import FontButton from "./common/fontButton";
 // style
+
+export const CANVAS_WIDTH = 300;
+export const CANVAS_HEIGHT = 200;
 
 export default function Canvas({
   canvasRef,
@@ -17,8 +21,8 @@ export default function Canvas({
     // canvas useRef
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = 300;
-      canvas.height = 200;
+      canvas.width = CANVAS_WIDTH;
+      canvas.height = CANVAS_HEIGHT;
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.lineJoin = "round";
@@ -45,20 +49,33 @@ export default function Canvas({
     }
   };
 
+  const clearCanvas = () => {
+    getCtx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  };
+
   return (
-    <div className="max-w-full w-full">
-      <div className="max-w-full">
-        <canvas
-          className="m-auto border-gray-300 border-2"
-          ref={canvasRef}
-          onMouseDown={() => setPainting(true)}
-          onMouseUp={() => setPainting(false)}
-          onMouseMove={(e) => drawFn(e)}
-          onMouseLeave={() => setPainting(false)}
-          width="300"
-          height="200"
-        ></canvas>
+    <>
+      <div className="max-w-full w-full">
+        <div className="max-w-full">
+          <canvas
+            className="m-auto border-gray-300 border-2"
+            ref={canvasRef}
+            onMouseDown={() => setPainting(true)}
+            onMouseUp={() => setPainting(false)}
+            onMouseMove={(e) => drawFn(e)}
+            onMouseLeave={() => setPainting(false)}
+            width="300"
+            height="200"
+          ></canvas>
+        </div>
       </div>
-    </div>
+      <FontButton
+        type="button"
+        onClick={clearCanvas}
+        className="m-auto mt-2 text-sm"
+      >
+        다 지울래
+      </FontButton>
+    </>
   );
 }
