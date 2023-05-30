@@ -43,6 +43,8 @@ apiClient.interceptors.response.use(
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
             res.data.data;
 
+          console.log(newAccessToken, newRefreshToken);
+
           setAuthToken({
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
