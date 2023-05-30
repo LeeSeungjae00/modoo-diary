@@ -23,7 +23,7 @@ export default function UpdateDiaryForm({
       onSubmit={handleSubmit(onSubmitWrite)}
       className="w-full bg-white rounded-md p-2"
     >
-      <p className="pb-1 text-xl border-gray-500">
+      <div className="pb-1 text-xl border-gray-500">
         <strong className="flex">
           <p className="min-w-fit">제목 :</p>
           <input
@@ -35,7 +35,7 @@ export default function UpdateDiaryForm({
             className="bg-transparent flex-1 pl-1"
           ></input>
         </strong>
-      </p>
+      </div>
       {errors.title && (
         <InputAlert message={errors.title.message as string}></InputAlert>
       )}

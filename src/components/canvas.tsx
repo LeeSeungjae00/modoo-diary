@@ -17,11 +17,19 @@ export default function Canvas({
   // painting state
   const [painting, setPainting] = useState(false);
 
-  function getMousePos(canvasDom: any, mouseEvent: any) {
-    var rect = canvasDom.current.getBoundingClientRect();
+  function getMousePos(
+    canvasDom: React.RefObject<HTMLCanvasElement>,
+    mouseEvent: React.TouchEvent<HTMLCanvasElement>
+  ) {
+    var rect = canvasDom.current?.getBoundingClientRect();
+    if (rect)
+      return {
+        x: mouseEvent.touches[0].clientX - (rect.left || 0),
+        y: mouseEvent.touches[0].clientY - (rect.top || 0),
+      };
     return {
-      x: mouseEvent.touches[0].clientX - rect.left,
-      y: mouseEvent.touches[0].clientY - rect.top,
+      x: 0,
+      y: 0,
     };
   }
 
@@ -50,6 +58,7 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
+        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
@@ -66,14 +75,17 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
+        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
       }
     }
+    setPainting(true);
   };
 
   const clearCanvas = () => {
+    setPainting(false);
     getCtx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 
@@ -89,12 +101,12 @@ export default function Canvas({
             onMouseLeave={() => setPainting(false)}
             onMouseMove={drawFn}
             onTouchStart={(e) => {
+              setPainting(false);
               document.body.style.overflow = "hidden";
-              setPainting(true);
             }}
             onTouchEnd={(e) => {
-              document.body.style.overflow = "auto";
               setPainting(false);
+              document.body.style.overflow = "auto";
             }}
             onTouchMove={drawMobileFn}
             width="300"
