@@ -31,16 +31,14 @@ const DiaryCard = styled.div`
 `;
 
 const DateLabel = styled.p`
-  
-  :hover{
+  :hover {
     font-size: 0px;
     :after {
       content: attr(data-time);
       font-size: initial;
     }
   }
-`
-
+`;
 
 export default React.memo(function DiaryDiv({
   id,
@@ -84,7 +82,11 @@ export default React.memo(function DiaryDiv({
           )}
         </div>
         <div className="flex flex-col items-end">
-          <DateLabel data-time={format(new Date(createdTime), " HH시 mm분", { locale: ko })}>
+          <DateLabel
+            data-time={format(new Date(createdTime), " HH시 mm분", {
+              locale: ko,
+            })}
+          >
             {format(new Date(createdTime), "yyyy년 M월 d일 EEE", {
               locale: ko,
             })}

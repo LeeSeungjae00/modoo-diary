@@ -18,7 +18,7 @@ export const setAuthToken = ({
 }) => {
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   if (refreshToken) {
-    window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
   }
   apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 };
@@ -29,7 +29,7 @@ export const removeAuthToken = () => {
 };
 
 export const getParsedToken = () => {
-  const accessToken = window.localStorage.getItem(ACCESS_TOKEN_KEY);
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
   if (accessToken) {
     return jwtDecode<AccessTokenPayload>(accessToken);
   }

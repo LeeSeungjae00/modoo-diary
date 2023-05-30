@@ -11,6 +11,7 @@ import { FontSpan } from "@/components/common/fontSpan";
 import { AuthContext } from "@/context/authInfo.context";
 import DiaryDiv from "@/components/diaryDiv";
 import { DiaryDivType } from "@/types/diary";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export type Products = {
   products: number[];
@@ -47,6 +48,7 @@ export default function Home() {
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const intersecting = useIntersection(fetchMoreRef);
   const { state } = useContext(AuthContext);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!intersecting || !isSuccess || !hasNextPage || isFetchingNextPage)
@@ -57,15 +59,46 @@ export default function Home() {
   return (
     <main className="flex min-h-screen max-w-screen-lg flex-col items-center p-8 pt-28 ">
       {data &&
-        data.pages.map((diary) => {
-          return (
-            <DiaryDiv
-              key={diary.id}
-              {...diary}
-              isLogin={state.isLogin}
-            ></DiaryDiv>
-          );
-        })}
+        (isMobile ? (
+          data.pages.map((diary) => {
+            return (
+              <DiaryDiv
+                key={diary.id}
+                {...diary}
+                isLogin={state.isLogin}
+              ></DiaryDiv>
+            );
+          })
+        ) : (
+          <div className="flex gap-4 w-full">
+            <div className="flex-1">
+              {data.pages
+                .filter((_, i) => i % 2 === 0)
+                .map((diary) => {
+                  return (
+                    <DiaryDiv
+                      key={diary.id}
+                      {...diary}
+                      isLogin={state.isLogin}
+                    ></DiaryDiv>
+                  );
+                })}
+            </div>
+            <div className="flex-1">
+              {data.pages
+                .filter((_, i) => i % 2 === 1)
+                .map((diary) => {
+                  return (
+                    <DiaryDiv
+                      key={diary.id}
+                      {...diary}
+                      isLogin={state.isLogin}
+                    ></DiaryDiv>
+                  );
+                })}
+            </div>
+          </div>
+        ))}
 
       <div ref={fetchMoreRef} />
       {(isLoading || isFetching) && (
