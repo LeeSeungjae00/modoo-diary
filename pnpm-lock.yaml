@@ -31,6 +31,9 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
+  body-scroll-lock:
+    specifier: 4.0.0-beta.0
+    version: 4.0.0-beta.0
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
@@ -67,6 +70,11 @@ dependencies:
   typescript:
     specifier: 5.0.4
     version: 5.0.4
+
+devDependencies:
+  '@types/body-scroll-lock':
+    specifier: ^3.1.0
+    version: 3.1.0
 
 packages:
 
@@ -523,6 +531,10 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
+  /@types/body-scroll-lock@3.1.0:
+    resolution: {integrity: sha512-3owAC4iJub5WPqRhxd8INarF2bWeQq1yQHBgYhN0XLBJMpd5ED10RrJ3aKiAwlTyL5wK7RkBD4SZUQz2AAAMdA==}
+    dev: true
+
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: false
@@ -825,6 +837,10 @@ packages:
   /binary-extensions@2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    dev: false
+
+  /body-scroll-lock@4.0.0-beta.0:
+    resolution: {integrity: sha512-a7tP5+0Mw3YlUJcGAKUqIBkYYGlYxk2fnCasq/FUph1hadxlTRjF+gAcZksxANnaMnALjxEddmSi/H3OR8ugcQ==}
     dev: false
 
   /bplist-parser@0.2.0:

@@ -1,6 +1,7 @@
 // react
 import React, { useRef, useEffect, useState } from "react";
 import FontButton from "./common/fontButton";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 // style
 
 export const CANVAS_WIDTH = 300;
@@ -11,12 +12,9 @@ export default function Canvas({
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement>;
 }) {
-  // useRef
-  // getCtx
   const [getCtx, setGetCtx] = useState<CanvasRenderingContext2D | null>(null);
-  // painting state
   const [painting, setPainting] = useState(false);
-
+  const body = document.querySelector("body") as HTMLElement;
   function getMousePos(
     canvasDom: React.RefObject<HTMLCanvasElement>,
     mouseEvent: React.TouchEvent<HTMLCanvasElement>
@@ -34,7 +32,6 @@ export default function Canvas({
   }
 
   useEffect(() => {
-    // canvas useRef
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.width = CANVAS_WIDTH;
@@ -101,12 +98,12 @@ export default function Canvas({
             onMouseLeave={() => setPainting(false)}
             onMouseMove={drawFn}
             onTouchStart={(e) => {
+              disableBodyScroll(body);
               setPainting(false);
-              document.body.style.overflow = "hidden";
             }}
             onTouchEnd={(e) => {
+              enableBodyScroll(body);
               setPainting(false);
-              document.body.style.overflow = "auto";
             }}
             onTouchMove={drawMobileFn}
             width="300"
