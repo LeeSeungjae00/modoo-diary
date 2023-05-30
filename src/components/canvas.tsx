@@ -1,6 +1,7 @@
 // react
 import React, { useRef, useEffect, useState } from "react";
 import FontButton from "./common/fontButton";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 // style
 
 export const CANVAS_WIDTH = 300;
@@ -11,22 +12,26 @@ export default function Canvas({
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement>;
 }) {
-  // useRef
-  // getCtx
   const [getCtx, setGetCtx] = useState<CanvasRenderingContext2D | null>(null);
-  // painting state
   const [painting, setPainting] = useState(false);
-
-  function getMousePos(canvasDom: any, mouseEvent: any) {
-    var rect = canvasDom.current.getBoundingClientRect();
+  const body = document.querySelector("body") as HTMLElement;
+  function getMousePos(
+    canvasDom: React.RefObject<HTMLCanvasElement>,
+    mouseEvent: React.TouchEvent<HTMLCanvasElement>
+  ) {
+    var rect = canvasDom.current?.getBoundingClientRect();
+    if (rect)
+      return {
+        x: mouseEvent.touches[0].clientX - (rect.left || 0),
+        y: mouseEvent.touches[0].clientY - (rect.top || 0),
+      };
     return {
-      x: mouseEvent.touches[0].clientX - rect.left,
-      y: mouseEvent.touches[0].clientY - rect.top,
+      x: 0,
+      y: 0,
     };
   }
 
   useEffect(() => {
-    // canvas useRef
     const canvas = canvasRef.current;
     if (canvas) {
       canvas.width = CANVAS_WIDTH;
@@ -50,6 +55,7 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
+        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
@@ -66,14 +72,17 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
+        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
       }
     }
+    setPainting(true);
   };
 
   const clearCanvas = () => {
+    setPainting(false);
     getCtx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 
@@ -89,11 +98,11 @@ export default function Canvas({
             onMouseLeave={() => setPainting(false)}
             onMouseMove={drawFn}
             onTouchStart={(e) => {
-              document.body.style.overflow = "hidden";
-              setPainting(true);
+              disableBodyScroll(body);
+              setPainting(false);
             }}
             onTouchEnd={(e) => {
-              document.body.style.overflow = "auto";
+              enableBodyScroll(body);
               setPainting(false);
             }}
             onTouchMove={drawMobileFn}
