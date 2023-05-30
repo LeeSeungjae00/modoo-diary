@@ -9,6 +9,7 @@ import EditButtons from "./editButtons";
 import useRemoveMutation from "@/hooks/mutations/useRemoveMutation";
 import UpdateDiaryForm from "./updateDiaryForm";
 import WellDoneButton from "./wellDoneButton";
+import MoreHarderButton from "./moreHarderButton";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
@@ -31,16 +32,14 @@ const DiaryCard = styled.div`
 `;
 
 const DateLabel = styled.p`
-  
-  :hover{
+  :hover {
     font-size: 0px;
     :after {
       content: attr(data-time);
       font-size: initial;
     }
   }
-`
-
+`;
 
 export default React.memo(function DiaryDiv({
   id,
@@ -84,7 +83,11 @@ export default React.memo(function DiaryDiv({
           )}
         </div>
         <div className="flex flex-col items-end">
-          <DateLabel data-time={format(new Date(createdTime), " HH시 mm분", { locale: ko })}>
+          <DateLabel
+            data-time={format(new Date(createdTime), " HH시 mm분", {
+              locale: ko,
+            })}
+          >
             {format(new Date(createdTime), "yyyy년 M월 d일 EEE", {
               locale: ko,
             })}
@@ -121,6 +124,11 @@ export default React.memo(function DiaryDiv({
             isLogin={isLogin}
             recommendCount={recommendCount}
           ></WellDoneButton>
+          <MoreHarderButton
+            id={id}
+            isLogin={isLogin}
+            recommendCount={recommendCount}
+          ></MoreHarderButton>
         </div>
       )}
     </DiaryCard>
