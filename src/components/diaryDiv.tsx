@@ -115,8 +115,6 @@ export default React.memo(function DiaryDiv({
               className="mx-auto border-gray-500 border-2 my-2"
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP0dPesBwADFAFamsrLhQAAAABJRU5ErkJggg=="
               src={drawing.displayUrl}
               alt={title}
             ></Image>

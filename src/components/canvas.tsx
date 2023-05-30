@@ -17,6 +17,14 @@ export default function Canvas({
   // painting state
   const [painting, setPainting] = useState(false);
 
+  function getMousePos(canvasDom: any, mouseEvent: any) {
+    var rect = canvasDom.current.getBoundingClientRect();
+    return {
+      x: mouseEvent.touches[0].clientX - rect.left,
+      y: mouseEvent.touches[0].clientY - rect.top,
+    };
+  }
+
   useEffect(() => {
     // canvas useRef
     const canvas = canvasRef.current;
@@ -49,6 +57,24 @@ export default function Canvas({
     }
   };
 
+  const drawMobileFn = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { x, y } = getMousePos(canvasRef, e);
+    const mouseX = x;
+    const mouseY = y;
+    // drawing
+    if (getCtx) {
+      if (!painting) {
+        getCtx.beginPath();
+        getCtx.moveTo(mouseX, mouseY);
+      } else {
+        getCtx.lineTo(mouseX, mouseY);
+        getCtx.stroke();
+      }
+    }
+  };
+
   const clearCanvas = () => {
     getCtx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
@@ -62,8 +88,19 @@ export default function Canvas({
             ref={canvasRef}
             onMouseDown={() => setPainting(true)}
             onMouseUp={() => setPainting(false)}
-            onMouseMove={(e) => drawFn(e)}
             onMouseLeave={() => setPainting(false)}
+            onMouseMove={drawFn}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setPainting(true);
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setPainting(false);
+            }}
+            onTouchMove={drawMobileFn}
             width="300"
             height="200"
           ></canvas>
