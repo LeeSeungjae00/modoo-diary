@@ -42,15 +42,23 @@ export default function Write() {
   });
   const coordinate = useCoordinate();
 
-  function onSubmitWrite(data: DiaryType) {
+  async function onSubmitWrite(data: DiaryType) {
+    let resp = data;
     if (coordinate.loaded && !coordinate.error) {
-      write({
-        ...data,
+      resp = {
+        ...resp,
         ...coordinate.coordinates,
-      });
-      return;
+      };
     }
-    write(data);
+
+    if (isDrawAble) {
+      const canvasData = await uploadCanvasData();
+      resp = {
+        ...resp,
+        ...canvasData,
+      };
+    }
+    write(resp);
   }
 
   async function uploadCanvasData() {
@@ -59,11 +67,17 @@ export default function Write() {
       var formData = new FormData();
       formData.append("image", bb);
 
-      await axios.post(
+      const res = await axios.post(
         `https://api.imgbb.com/1/upload?expiration=15552000&key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_TOKEN}`,
         formData
       );
+
+      return {
+        displayUrl: res.data.data.display_url,
+        deleteUrl: res.data.data.delete_url,
+      };
     }
+    return;
   }
 
   return (
