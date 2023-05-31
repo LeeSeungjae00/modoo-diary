@@ -55,7 +55,6 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
-        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
@@ -72,7 +71,6 @@ export default function Canvas({
       if (!painting) {
         getCtx.beginPath();
         getCtx.moveTo(mouseX, mouseY);
-        console.log("tes111t");
       } else {
         getCtx.lineTo(mouseX, mouseY);
         getCtx.stroke();
