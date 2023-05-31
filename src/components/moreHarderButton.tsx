@@ -1,4 +1,5 @@
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
+import useUnLikeMutation from "@/hooks/mutations/useUnLikeMutation";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
@@ -35,17 +36,17 @@ const MoreHarderDiv = styled.div`
 export default React.memo(function MoreHarderButton({
   id,
   isLogin,
-  recommendCount,
+  unlikeCount,
 }: {
   id: number;
   isLogin: AccessTokenPayload | undefined;
-  recommendCount: number;
+  unlikeCount: number;
 }) {
-  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
+  const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
   const route = useRouter();
   const onClickMoreHarder = (diaryId: number) => {
     if (isLogin) {
-      like(diaryId);
+      unLike(diaryId);
     } else {
       route.push("/auth/login");
     }
@@ -56,7 +57,7 @@ export default React.memo(function MoreHarderButton({
         disabled={isLoadingLike}
         onClick={() => onClickMoreHarder(id)}
       ></MoreHarder>
-      x {recommendCount}
+      x {unlikeCount}
     </MoreHarderDiv>
   );
 });

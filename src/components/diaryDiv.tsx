@@ -50,6 +50,7 @@ export default React.memo(function DiaryDiv({
   content,
   isLogin,
   recommendCount,
+  unlikeCount,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
 
@@ -127,7 +128,7 @@ export default React.memo(function DiaryDiv({
           <MoreHarderButton
             id={id}
             isLogin={isLogin}
-            recommendCount={recommendCount}
+            unlikeCount={unlikeCount}
           ></MoreHarderButton>
         </div>
       )}
