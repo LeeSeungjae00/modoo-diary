@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /exclude
+
+# Host
+Host: https://어쩔.tv/
+
+# Sitemaps
+Sitemap: https://어쩔.tv/sitemap.xml

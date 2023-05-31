@@ -8,10 +8,41 @@ import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
+{
+  /* <meta name="title" content="모두의 일기">
+<meta name="description" content="누구나 작성할 수 있는 모두의 일기">
+<meta name="keywords" content="일기, 모두, 모두의 일기, daily, diary, funny, 모두의 일기장, 일기장, everyone diary, moodo, everybody diary">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="language" content="English"></meta> */
+}
+
 export const metadata: Metadata = {
   title: "모두의 일기",
   description: "모두 다같이 일기를 작성해봐요.",
+  keywords: [
+    "일기",
+    "모두",
+    "모두의 일기",
+    "daily",
+    "diary",
+    "funny",
+    "모두의 일기장",
+    "일기장",
+    "everyone diary",
+    "moodo",
+    "everybody diary",
+    "소통",
+    "쓸만한",
+    "시간 보내기",
+    "하루일기장",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
+    siteName: "모두의 일기",
     title: "모두의 일기",
     images: "/static/images/welldone.png",
     description: "모두 다같이 일기를 작성해봐요.",
