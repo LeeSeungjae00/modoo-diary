@@ -1,12 +1,14 @@
 export default function dataURItoBlob(dataURI: string) {
-  var byteString = atob(dataURI.split(",")[1]);
-  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-  var ab = new ArrayBuffer(byteString.length);
-  var ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i++) {
+  let byteString = Buffer.from(dataURI.split(",")[1], "base64").toString(
+    "binary"
+  );
+  let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+  let ab = new ArrayBuffer(byteString.length);
+  let ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
 
-  var bb = new Blob([ab], { type: mimeString });
+  let bb = new Blob([ab], { type: mimeString });
   return bb;
 }
