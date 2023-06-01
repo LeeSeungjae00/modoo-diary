@@ -3,6 +3,10 @@ import { AccessTokenPayload } from "./auth";
 export interface DiaryType {
   title: string;
   content: string;
+  drawing?: {
+    displayUrl: string;
+    deleteUrl: string;
+  };
 }
 
 export interface DiaryWriteType extends DiaryType {

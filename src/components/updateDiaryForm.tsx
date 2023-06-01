@@ -23,7 +23,7 @@ export default function UpdateDiaryForm({
       onSubmit={handleSubmit(onSubmitWrite)}
       className="w-full bg-white rounded-md p-2"
     >
-      <p className="pb-1 text-xl border-gray-500">
+      <div className="pb-1 text-xl border-gray-500">
         <strong className="flex">
           <p className="min-w-fit">제목 :</p>
           <input
@@ -35,7 +35,7 @@ export default function UpdateDiaryForm({
             className="bg-transparent flex-1 pl-1"
           ></input>
         </strong>
-      </p>
+      </div>
       {errors.title && (
         <InputAlert message={errors.title.message as string}></InputAlert>
       )}
@@ -53,7 +53,7 @@ export default function UpdateDiaryForm({
       <p className="text-lg border-gray-500 text-end">
         <FontButton
           type="submit"
-          className="w-full text-blue-800 bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          className="w-full text-blue-800 bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 text-xl"
         >
           끄읏.
         </FontButton>
