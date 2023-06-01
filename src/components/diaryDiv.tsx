@@ -134,16 +134,16 @@ export default React.memo(function DiaryDiv({
           <p className="border-b-2 text-lg border-gray-500 text-end">
             <strong>끄읏.</strong>
           </p>
-          <WellDoneButton
-            id={id}
-            isLogin={isLogin}
-            recommendCount={recommendCount}
-          ></WellDoneButton>
           <MoreHarderButton
             id={id}
             isLogin={isLogin}
             unlikeCount={unlikeCount}
           ></MoreHarderButton>
+          <WellDoneButton
+            id={id}
+            isLogin={isLogin}
+            recommendCount={recommendCount}
+          ></WellDoneButton>
         </div>
       )}
     </DiaryCard>
