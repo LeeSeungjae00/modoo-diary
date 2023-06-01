@@ -36,6 +36,10 @@ export const metadata: Metadata = {
     "쓸만한",
     "시간 보내기",
     "하루일기장",
+    "일기쓰기 좋은 사이트",
+    "온라인 일기장",
+    "그림일기",
+    "온라인 그림일기",
   ],
   robots: {
     index: true,
@@ -46,7 +50,7 @@ export const metadata: Metadata = {
     title: "모두의 일기",
     images: "/static/images/welldone.png",
     description: "모두 다같이 일기를 작성해봐요.",
-    url: "https://modoo-diary.vercel.app/",
+    url: "https://xn--oh5bq8f.tv/",
   },
 };
 
