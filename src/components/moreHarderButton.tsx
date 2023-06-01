@@ -1,11 +1,12 @@
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
+import useUnLikeMutation from "@/hooks/mutations/useUnLikeMutation";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const WellDone = styled.button`
-  background-image: url("/static/images/welldone-removebg-preview.png");
+const MoreHarder = styled.button`
+  background-image: url("/static/images/moreharder.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 4rem;
@@ -22,41 +23,41 @@ const WellDone = styled.button`
   }
 `;
 
-const WellDoneDiv = styled.div`
+const MoreHarderDiv = styled.div`
   position: absolute;
   transition: rotate(45deg);
   transform: rotate(342deg);
   display: flex;
   bottom: 0.5rem;
-  right: 1.5rem;
+  right: 6rem;
   color: red;
 `;
 
-export default React.memo(function WellDoneButton({
+export default React.memo(function MoreHarderButton({
   id,
   isLogin,
-  recommendCount,
+  unlikeCount,
 }: {
   id: number;
   isLogin: AccessTokenPayload | undefined;
-  recommendCount: number;
+  unlikeCount: number;
 }) {
-  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
+  const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
   const route = useRouter();
-  const onClickWellDone = (diaryId: number) => {
+  const onClickMoreHarder = (diaryId: number) => {
     if (isLogin) {
-      like(diaryId);
+      unLike(diaryId);
     } else {
       route.push("/auth/login");
     }
   };
   return (
-    <WellDoneDiv>
-      <WellDone
+    <MoreHarderDiv>
+      <MoreHarder
         disabled={isLoadingLike}
-        onClick={() => onClickWellDone(id)}
-      ></WellDone>
-      x {recommendCount}
-    </WellDoneDiv>
+        onClick={() => onClickMoreHarder(id)}
+      ></MoreHarder>
+      x {unlikeCount}
+    </MoreHarderDiv>
   );
 });

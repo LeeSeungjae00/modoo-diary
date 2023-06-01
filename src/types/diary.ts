@@ -24,6 +24,7 @@ export interface DiaryDivType extends DiaryType {
   content: string;
   isLogin: AccessTokenPayload | undefined;
   recommendCount: number;
+  unlikeCount: number;
 }
 
 export interface InfinitiScrollDataType<T> {
@@ -41,4 +42,5 @@ export interface DiaryPageType {
   recommendCount: number;
   createdTime: string;
   updatedTime: string;
+  unlikeCount: number;
 }

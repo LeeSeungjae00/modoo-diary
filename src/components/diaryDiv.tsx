@@ -9,6 +9,7 @@ import EditButtons from "./editButtons";
 import useRemoveMutation from "@/hooks/mutations/useRemoveMutation";
 import UpdateDiaryForm from "./updateDiaryForm";
 import WellDoneButton from "./wellDoneButton";
+import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./canvas";
 
@@ -51,6 +52,7 @@ export default React.memo(function DiaryDiv({
   content,
   isLogin,
   recommendCount,
+  unlikeCount,
   drawing,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
@@ -137,6 +139,11 @@ export default React.memo(function DiaryDiv({
             isLogin={isLogin}
             recommendCount={recommendCount}
           ></WellDoneButton>
+          <MoreHarderButton
+            id={id}
+            isLogin={isLogin}
+            unlikeCount={unlikeCount}
+          ></MoreHarderButton>
         </div>
       )}
     </DiaryCard>
