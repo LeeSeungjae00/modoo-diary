@@ -28,7 +28,7 @@ const useUnLikeMutation = (id: number) => {
                 if (val.id === data) {
                   return {
                     ...val,
-                    unlikeCount: --val.unlikeCount,
+                    unlikeCount: ++val.unlikeCount,
                   };
                 }
                 return val;
