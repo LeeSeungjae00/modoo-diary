@@ -12,9 +12,11 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 const apiClient = axios.create();
 
 apiClient.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+apiClient.defaults.headers.put["Content-Type"] = "application/json";
+apiClient.defaults.headers.common["Content-Type"] = "application/json";
 if (typeof window !== "undefined") {
   apiClient.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
-    ACCESS_TOKEN_KEY
+    "access_token"
   )}`;
 }
 
@@ -32,12 +34,6 @@ apiClient.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      // const config: AxiosRequestConfig = {
-      //   headers: {
-      //     Authorization: `Bearer ${refreshToken}`,
-      //   },
-      // };
-
       const data = {
         refreshToken,
         accessToken,
@@ -48,6 +44,8 @@ apiClient.interceptors.response.use(
         .then((res: AxiosResponse) => {
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
             res.data.data;
+
+          console.log(newAccessToken, newRefreshToken);
 
           setAuthToken({
             accessToken: newAccessToken,
