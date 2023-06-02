@@ -13,7 +13,7 @@ import Canvas from "@/components/canvas";
 import axios from "axios";
 import dataURItoBlob from "@/lib/dataURItoBlob";
 
-const FontH1 = styled.h1`
+export const FontH1 = styled.h1`
   font-family: Chilgok_lws;
 `;
 

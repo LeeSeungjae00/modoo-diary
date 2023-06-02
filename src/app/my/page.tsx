@@ -13,6 +13,7 @@ import axios, { AxiosError } from "axios";
 import { AuthContext } from "@/context/authInfo.context";
 import { API_ROUTE_MY_INFO } from "@/constants/api/members";
 import { getMyInfo } from "@/api/members";
+import FormContentSkeleton from "@/components/common/formContentSkeleton";
 
 export default function My() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function My() {
     getValues,
   } = useForm<SignUpFormType>();
   const { state } = useContext(AuthContext);
-  const query = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [API_ROUTE_MY_INFO, state.isLogin?.sub],
     queryFn: getMyInfo(state.isLogin?.sub || ""),
     refetchOnMount: false,
@@ -51,113 +52,103 @@ export default function My() {
       <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         내 정보를 수정하세요
       </h1>
-      <form
-        onSubmit={handleSubmit(onSubmitSignUp, (data) => {
-          console.log(data);
-        })}
-        className="space-y-4 md:space-y-6"
-        action="#"
-      >
-        <div>
-          <Label htmlFor="loginId">아이디</Label>
-          <Input
-            {...register("loginId", {
-              required: "아이디를 입력해주세요",
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "이메일 형식에 맞지 않습니다.",
-              },
-            })}
-            type="loginId"
-            name="loginId"
-            id="loginId"
-            placeholder="name@company.com"
-          />
-        </div>
-        {errors.loginId && (
-          <InputAlert message={errors.loginId.message as string}></InputAlert>
-        )}
-        {errors.passwordConfirmation && (
-          <InputAlert
-            message={errors.passwordConfirmation.message as string}
-          ></InputAlert>
-        )}
+      <div className="space-y-4 md:space-y-6">
         <div>
           <Label htmlFor="nickName">닉네임</Label>
-          <Input
-            {...register("nickName", { required: "닉네임을 입력해주세요" })}
-            type="nickName"
-            name="nickName"
-            id="nickName"
-            placeholder="모두의 일기"
-          />
+          {isLoading ? (
+            <FormContentSkeleton></FormContentSkeleton>
+          ) : (
+            <div className="flex">
+              <Input
+                {...register("nickName", { required: "닉네임을 입력해주세요" })}
+                type="nickName"
+                name="nickName"
+                id="nickName"
+                placeholder="모두의 일기"
+              />
+              <button
+                title="닉네임 수정하기"
+                type="button"
+                className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <span className="w-5 h-5">💾</span>
+              </button>
+            </div>
+          )}
         </div>
         {errors.nickName && (
           <InputAlert message={errors.nickName.message as string}></InputAlert>
         )}
         <div>
           <Label htmlFor="region">지역</Label>
-          <Radio
-            radioList={[
-              {
-                inputArg: {
-                  value: "SEOUL",
-                  ...register("region", {
-                    required: "지역을 선택해 주세요",
-                  }),
-                },
-                lable: "서울",
-              },
-              {
-                inputArg: {
-                  value: "BUSAN",
-                  ...register("region", {
-                    required: "지역을 선택해 주세요",
-                  }),
-                },
-                lable: "부산",
-              },
-              {
-                inputArg: {
-                  value: "INCHEON",
-                  ...register("region", {
-                    required: "지역을 선택해 주세요",
-                  }),
-                },
-                lable: "인천",
-              },
-              {
-                inputArg: {
-                  value: "ULSAN",
-                  ...register("region", {
-                    required: "지역을 선택해 주세요",
-                  }),
-                },
-                lable: "울산",
-              },
-              {
-                inputArg: {
-                  value: "GWANGJU",
-                  ...register("region", {
-                    required: "지역을 선택해 주세요",
-                  }),
-                },
-                lable: "광주",
-              },
-            ]}
-          ></Radio>
+          {isLoading ? (
+            <FormContentSkeleton></FormContentSkeleton>
+          ) : (
+            <div className="flex">
+              <Radio
+                radioList={[
+                  {
+                    inputArg: {
+                      value: "SEOUL",
+                      ...register("region", {
+                        required: "지역을 선택해 주세요",
+                      }),
+                    },
+                    lable: "서울",
+                  },
+                  {
+                    inputArg: {
+                      value: "BUSAN",
+                      ...register("region", {
+                        required: "지역을 선택해 주세요",
+                      }),
+                    },
+                    lable: "부산",
+                  },
+                  {
+                    inputArg: {
+                      value: "INCHEON",
+                      ...register("region", {
+                        required: "지역을 선택해 주세요",
+                      }),
+                    },
+                    lable: "인천",
+                  },
+                  {
+                    inputArg: {
+                      value: "ULSAN",
+                      ...register("region", {
+                        required: "지역을 선택해 주세요",
+                      }),
+                    },
+                    lable: "울산",
+                  },
+                  {
+                    inputArg: {
+                      value: "GWANGJU",
+                      ...register("region", {
+                        required: "지역을 선택해 주세요",
+                      }),
+                    },
+                    lable: "광주",
+                  },
+                ]}
+              ></Radio>
+              <button
+                title="닉네임 수정하기"
+                type="button"
+                className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <span className="w-5 h-5">💾</span>
+              </button>
+            </div>
+          )}
         </div>
         {errors.region && (
           <InputAlert message={errors.region.message as string}></InputAlert>
         )}
-        <button
-          type="submit"
-          className="w-full text-blue-800 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        >
-          회원가입 하고 로그인 하러 가기
-        </button>
         {errorMessage && <InputAlert message={errorMessage}></InputAlert>}
-      </form>
+      </div>
     </div>
   );
 }
