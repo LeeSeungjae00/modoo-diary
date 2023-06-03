@@ -20,16 +20,23 @@ export default function My() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const {
     register,
-    handleSubmit,
     formState: { errors },
-    getValues,
-  } = useForm<SignUpFormType>();
+    setValue,
+  } = useForm<{
+    region: string;
+    nickName: string;
+    email: string;
+  }>();
   const { state } = useContext(AuthContext);
   const { data, isLoading } = useQuery({
     queryKey: [API_ROUTE_MY_INFO, state.isLogin?.sub],
     queryFn: getMyInfo(state.isLogin?.sub || ""),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    select: (res) => res.data.data,
+    onSuccess: (data) => {
+      setValue("region", data.region);
+    },
   });
 
   const { mutate: signUp, isError } = useMutation({
@@ -54,6 +61,27 @@ export default function My() {
       </h1>
       <div className="space-y-4 md:space-y-6">
         <div>
+          <Label htmlFor="nickName">이메일</Label>
+          {isLoading ? (
+            <FormContentSkeleton></FormContentSkeleton>
+          ) : (
+            <div className="flex">
+              <Input
+                {...register("email", { required: "이메일을 입력해주세요" })}
+                placeholder="name@company.com"
+                defaultValue={data?.email}
+              />
+              <button
+                title="이메일 수정하기"
+                type="button"
+                className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                <span className="w-5 h-5">💾</span>
+              </button>
+            </div>
+          )}
+        </div>
+        <div>
           <Label htmlFor="nickName">닉네임</Label>
           {isLoading ? (
             <FormContentSkeleton></FormContentSkeleton>
@@ -61,10 +89,8 @@ export default function My() {
             <div className="flex">
               <Input
                 {...register("nickName", { required: "닉네임을 입력해주세요" })}
-                type="nickName"
-                name="nickName"
-                id="nickName"
                 placeholder="모두의 일기"
+                defaultValue={data?.nickName}
               />
               <button
                 title="닉네임 수정하기"
