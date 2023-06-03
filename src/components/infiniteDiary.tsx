@@ -3,17 +3,15 @@ import { getDiarys } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import useIntersection from "@/hooks/useIntersection";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useContext, useEffect, useRef } from "react";
+import {  useEffect, useRef } from "react";
 import { FontSpan } from "@/components/common/fontSpan";
-import { AuthContext } from "@/context/authInfo.context";
 import DiaryDiv from "@/components/diaryDiv";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 export type Products = {
   products: number[];
 };
 
-export default function Home() {
+export default function InfiniteDiary() {
   const {
     data,
     isSuccess,
@@ -24,7 +22,7 @@ export default function Home() {
     isFetching,
   } = useInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],
-    queryFn: ({ pageParam = 0 }) => getDiarys(pageParam),
+    queryFn: ({ pageParam = 1 }) => getDiarys(pageParam),
     getNextPageParam: (lastPage) => {
       const nowPage = lastPage.number + 1;
       if (nowPage < lastPage.totalPages) {
@@ -43,8 +41,6 @@ export default function Home() {
   });
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const intersecting = useIntersection(fetchMoreRef);
-  const { state } = useContext(AuthContext);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!intersecting || !isSuccess || !hasNextPage || isFetchingNextPage)
@@ -54,46 +50,14 @@ export default function Home() {
 
   return (
 <>      {data &&
-        (isMobile ? (
-          data.pages.map((diary) => {
-            return (
-              <DiaryDiv
-                key={diary.id}
-                {...diary}
-                isLogin={state.isLogin}
-              ></DiaryDiv>
-            );
-          })
-        ) : (
-          <div className="flex gap-4 w-full">
-            <div className="flex-1">
-              {data.pages
-                .filter((_, i) => i % 2 === 0)
-                .map((diary) => {
-                  return (
-                    <DiaryDiv
-                      key={diary.id}
-                      {...diary}
-                      isLogin={state.isLogin}
-                    ></DiaryDiv>
-                  );
-                })}
-            </div>
-            <div className="flex-1">
-              {data.pages
-                .filter((_, i) => i % 2 === 1)
-                .map((diary) => {
-                  return (
-                    <DiaryDiv
-                      key={diary.id}
-                      {...diary}
-                      isLogin={state.isLogin}
-                    ></DiaryDiv>
-                  );
-                })}
-            </div>
-          </div>
-        ))}
+        data.pages.map((diary) => {
+          return (
+            <DiaryDiv
+              key={diary.id}
+              {...diary}
+            ></DiaryDiv>
+          );
+        })}
 
       <div ref={fetchMoreRef} />
       {(isLoading || isFetching) && (

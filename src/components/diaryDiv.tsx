@@ -1,8 +1,9 @@
+"use client";
 import { DiaryDivType, DiaryType } from "@/types/diary";
 import styled from "@emotion/styled";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useWriteMutation from "@/hooks/mutations/useWriteMutation";
 import FontPre from "./common/fontPre";
 import EditButtons from "./editButtons";
@@ -12,12 +13,13 @@ import WellDoneButton from "./wellDoneButton";
 import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./canvas";
+import { AuthContext } from "@/context/authInfo.context";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 50%;
   align-items: flex-start;
   padding: 0.5rem;
   background-size: cover;
@@ -50,12 +52,14 @@ export default React.memo(function DiaryDiv({
   weather,
   title,
   content,
-  isLogin,
   recommendCount,
   unlikeCount,
   drawing,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
+  const {
+    state: { isLogin },
+  } = useContext(AuthContext);
 
   const { mutate: remove } = useRemoveMutation();
   const { mutate: write } = useWriteMutation(id);

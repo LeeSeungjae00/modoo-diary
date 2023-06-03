@@ -3,8 +3,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api:path*",
-        destination: "http://mingky.me:22001/api:path*",
+        source: "/:path*",
+        destination: "http://mingky.me:22001/:path*",
       },
     ];
   },
