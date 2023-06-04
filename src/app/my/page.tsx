@@ -5,15 +5,28 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { postSignUp } from "@/api/auth";
-import { SignUpFormType } from "@/types/auth";
+import { AccessTokenPayload, SignUpFormType } from "@/types/auth";
 import { useRouter } from "next/navigation";
 import InputAlert from "@/components/common/inputAlert";
 import Radio from "@/components/common/radio";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { AuthContext } from "@/context/authInfo.context";
 import { API_ROUTE_MY_INFO } from "@/constants/api/members";
-import { getMyInfo } from "@/api/members";
+import {
+  getMyInfo,
+  patcNickname,
+  patchEmail,
+  patchRegion,
+} from "@/api/members";
 import FormContentSkeleton from "@/components/common/formContentSkeleton";
+import apiClient, { reissue } from "@/api/modooClient";
+import { API_ROUTE_AUTH_REISSUE } from "@/constants/api/auth";
+import {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  setAuthToken,
+} from "@/lib/authUtill";
+import jwtDecode from "jwt-decode";
 
 export default function My() {
   const router = useRouter();
@@ -22,16 +35,16 @@ export default function My() {
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<{
     region: string;
     nickName: string;
     email: string;
   }>();
-  const { state } = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
   const { data, isLoading } = useQuery({
     queryKey: [API_ROUTE_MY_INFO, state.isLogin?.sub],
     queryFn: getMyInfo(state.isLogin?.sub || ""),
-    refetchOnMount: false,
     refetchOnWindowFocus: false,
     select: (res) => res.data.data,
     onSuccess: (data) => {
@@ -39,20 +52,46 @@ export default function My() {
     },
   });
 
-  const { mutate: signUp, isError } = useMutation({
-    mutationFn: postSignUp,
-    onSuccess: () => {
-      router.push("/auth/login");
-    },
+  const { mutate: updateRegion } = useMutation({
+    mutationFn: patchRegion,
+    onSuccess: () => {},
     onError: (error: any) => {
       // console.log();
       setErrorMessage(error?.response?.data.error.code || "");
     },
   });
 
-  function onSubmitSignUp(data: SignUpFormType) {
-    signUp(data);
-  }
+  const { mutate: updateEmail } = useMutation({
+    mutationFn: patchEmail,
+    onSuccess: () => {},
+    onError: (error: any) => {
+      // console.log();
+      setErrorMessage(error?.response?.data.error.code || "");
+    },
+  });
+
+  const { mutate: updateNickname } = useMutation({
+    mutationFn: patcNickname,
+    onSuccess: () => {
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (refreshToken) {
+        reissue({
+          accessToken,
+          refreshToken,
+        }).then((res) => {
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+            res.data.data;
+          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
+          dispatch({ type: "SIGNIN", payload });
+        });
+      }
+    },
+    onError: (error: any) => {
+      // console.log();
+      setErrorMessage(error?.response?.data.error.code || "");
+    },
+  });
 
   return (
     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -75,6 +114,14 @@ export default function My() {
                 title="이메일 수정하기"
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={() => {
+                  if (state.isLogin?.sub) {
+                    updateEmail({
+                      memberId: state.isLogin.sub,
+                      email: getValues("email"),
+                    });
+                  }
+                }}
               >
                 <span className="w-5 h-5">💾</span>
               </button>
@@ -96,6 +143,14 @@ export default function My() {
                 title="닉네임 수정하기"
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={() => {
+                  if (state.isLogin?.sub) {
+                    updateNickname({
+                      memberId: state.isLogin.sub,
+                      nickName: getValues("nickName"),
+                    });
+                  }
+                }}
               >
                 <span className="w-5 h-5">💾</span>
               </button>
@@ -164,6 +219,14 @@ export default function My() {
                 title="닉네임 수정하기"
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={() => {
+                  if (state.isLogin?.sub) {
+                    updateRegion({
+                      memberId: state.isLogin.sub,
+                      region: getValues("region"),
+                    });
+                  }
+                }}
               >
                 <span className="w-5 h-5">💾</span>
               </button>
