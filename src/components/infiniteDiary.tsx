@@ -32,7 +32,6 @@ export default function InfiniteDiary() {
       return undefined;
     },
     select: (data) => {
-      console.log(data);
       return {
         pageParams: data.pageParams,
         pages: data.pages.reduce((prev: any[], curr) => {
