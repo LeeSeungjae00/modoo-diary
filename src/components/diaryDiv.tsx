@@ -19,7 +19,7 @@ const DiaryCard = styled.div`
   font-family: Chilgok_lws;
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
   align-items: flex-start;
   padding: 0.5rem;
   background-size: cover;
