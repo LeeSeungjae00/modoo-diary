@@ -8,15 +8,6 @@ import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-{
-  /* <meta name="title" content="모두의 일기">
-<meta name="description" content="누구나 작성할 수 있는 모두의 일기">
-<meta name="keywords" content="일기, 모두, 모두의 일기, daily, diary, funny, 모두의 일기장, 일기장, everyone diary, moodo, everybody diary">
-<meta name="robots" content="index, follow">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="language" content="English"></meta> */
-}
-
 export const metadata: Metadata = {
   title: "모두의 일기",
   description: "모두 다같이 일기를 작성해봐요.",
@@ -40,6 +31,9 @@ export const metadata: Metadata = {
     "온라인 일기장",
     "그림일기",
     "온라인 그림일기",
+    "어쩔tv",
+    "어쩔.tv",
+    "일기장 프로그램",
   ],
   robots: {
     index: true,
