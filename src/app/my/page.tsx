@@ -3,7 +3,7 @@ import Input from "@/components/common/input";
 import Label from "@/components/common/label";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postSignUp } from "@/api/auth";
 import { AccessTokenPayload, SignUpFormType } from "@/types/auth";
 import { useRouter } from "next/navigation";
@@ -27,9 +27,9 @@ import {
   setAuthToken,
 } from "@/lib/authUtill";
 import jwtDecode from "jwt-decode";
+import { ToastContainer, Zoom, toast } from "react-toastify";
 
 export default function My() {
-  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const {
     register,
@@ -45,16 +45,31 @@ export default function My() {
   const { data, isLoading } = useQuery({
     queryKey: [API_ROUTE_MY_INFO, state.isLogin?.sub],
     queryFn: getMyInfo(state.isLogin?.sub || ""),
-    refetchOnWindowFocus: false,
     select: (res) => res.data.data,
     onSuccess: (data) => {
+      setValue("nickName", data.nickName);
+      setValue("email", data.email);
       setValue("region", data.region);
     },
   });
 
   const { mutate: updateRegion } = useMutation({
     mutationFn: patchRegion,
-    onSuccess: () => {},
+    onSuccess: () => {
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (refreshToken) {
+        reissue({
+          accessToken,
+          refreshToken,
+        }).then((res) => {
+          const { accessToken: newAccessToken } = res.data.data;
+          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
+          dispatch({ type: "SIGNIN", payload });
+          toast(<p className="text-center">지역이 변경되었습니다.</p>);
+        });
+      }
+    },
     onError: (error: any) => {
       // console.log();
       setErrorMessage(error?.response?.data.error.code || "");
@@ -63,7 +78,21 @@ export default function My() {
 
   const { mutate: updateEmail } = useMutation({
     mutationFn: patchEmail,
-    onSuccess: () => {},
+    onSuccess: () => {
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+      if (refreshToken) {
+        reissue({
+          accessToken,
+          refreshToken,
+        }).then((res) => {
+          const { accessToken: newAccessToken } = res.data.data;
+          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
+          dispatch({ type: "SIGNIN", payload });
+          toast(<p className="text-center">이메일이 변경되었습니다.</p>);
+        });
+      }
+    },
     onError: (error: any) => {
       // console.log();
       setErrorMessage(error?.response?.data.error.code || "");
@@ -80,10 +109,10 @@ export default function My() {
           accessToken,
           refreshToken,
         }).then((res) => {
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-            res.data.data;
+          const { accessToken: newAccessToken } = res.data.data;
           const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
           dispatch({ type: "SIGNIN", payload });
+          toast(<p className="text-center">닉네임이 변경되었습니다.</p>);
         });
       }
     },
@@ -108,7 +137,6 @@ export default function My() {
               <Input
                 {...register("email", { required: "이메일을 입력해주세요" })}
                 placeholder="name@company.com"
-                defaultValue={data?.email}
               />
               <button
                 title="이메일 수정하기"
@@ -137,7 +165,6 @@ export default function My() {
               <Input
                 {...register("nickName", { required: "닉네임을 입력해주세요" })}
                 placeholder="모두의 일기"
-                defaultValue={data?.nickName}
               />
               <button
                 title="닉네임 수정하기"
@@ -237,6 +264,19 @@ export default function My() {
           <InputAlert message={errors.region.message as string}></InputAlert>
         )}
         {errorMessage && <InputAlert message={errorMessage}></InputAlert>}
+        <ToastContainer
+          position="bottom-center"
+          autoClose={500}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          transition={Zoom}
+          draggable={false}
+          pauseOnHover
+          theme="light"
+        />
       </div>
     </div>
   );
