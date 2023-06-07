@@ -22,7 +22,6 @@ export interface DiaryDivType extends DiaryType {
   weather: string;
   title: string;
   content: string;
-  isLogin: AccessTokenPayload | undefined;
   recommendCount: number;
   unlikeCount: number;
 }
