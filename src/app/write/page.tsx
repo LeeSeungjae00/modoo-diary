@@ -81,7 +81,7 @@ export default function Write() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-32 mx-auto min-h-screen lg:py-0 ">
+    <div className="flex flex-col items-center justify-center px-6 py-32 mx-auto min-h-screen">
       {isLoading ? (
         <FontH1>참 잘했어요</FontH1>
       ) : (
