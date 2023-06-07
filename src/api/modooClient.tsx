@@ -20,6 +20,32 @@ if (typeof window !== "undefined") {
   )}`;
 }
 
+export const reissue = ({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string | null;
+  refreshToken: string;
+}) =>
+  apiClient
+    .post(API_ROUTE_AUTH_REISSUE, {
+      accessToken,
+      refreshToken,
+    })
+    .then((res: AxiosResponse) => {
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        res.data.data;
+
+      console.log(newAccessToken, newRefreshToken);
+
+      setAuthToken({
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
+
+      return res;
+    });
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -39,19 +65,10 @@ apiClient.interceptors.response.use(
         accessToken,
       };
 
-      return apiClient
-        .post(API_ROUTE_AUTH_REISSUE, data)
-        .then((res: AxiosResponse) => {
+      return reissue(data)
+        .then((res) => {
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
             res.data.data;
-
-          console.log(newAccessToken, newRefreshToken);
-
-          setAuthToken({
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken,
-          });
-
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axios(originalRequest);
         })
