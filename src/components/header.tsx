@@ -77,9 +77,14 @@ export default function Header() {
             의 일기
           </Link>
           {state.isLogin ? (
-            <button onClick={logout} className="font-bold">
-              로그아웃
-            </button>
+            <div className="flex gap-2">
+              <Link href="/my" className="font-bold">
+                내 정보
+              </Link>
+              <button onClick={logout} className="font-bold">
+                로그아웃
+              </button>
+            </div>
           ) : (
             <div className="flex gap-2">
               <Link href="/auth/login" className="font-bold">
