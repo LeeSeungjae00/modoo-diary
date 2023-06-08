@@ -5,7 +5,6 @@ import Header from "@/components/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { AuthContextProvider } from "@/context/authInfo.context";
 import { Metadata } from "next";
-import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -118,6 +118,7 @@ export default React.memo(function DiaryDiv({
         <div className="w-full">
           {drawing && (
             <Image
+              priority
               className="mx-auto border-gray-500 border-2 my-2"
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
