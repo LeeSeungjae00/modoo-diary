@@ -4,6 +4,7 @@ import { DiaryDivType } from "@/types/diary";
 import InfiniteDiary from "@/components/infiniteDiary";
 import { Hydrate, dehydrate, useQueryClient } from "@tanstack/react-query";
 import getQueryClient from "@/lib/getQueryClient";
+import { Suspense } from "react";
 
 export type Products = {
   products: number[];
@@ -11,7 +12,8 @@ export type Products = {
 
 async function getFisrtDiaries() {
   const res = await fetch(
-    `http://mingky.me:22001${API_ROUTE_DIARIES_GET}?offset=0`
+    `http://mingky.me:22001${API_ROUTE_DIARIES_GET}?offset=0`,
+    { cache: "no-store" }
   )
     .then((res) => res.json())
     .then((res) => {
@@ -33,9 +35,6 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen max-w-screen-lg flex-col items-center p-8 pt-28 ">
-      {/* {ssrData.content.map((diary: DiaryDivType) => {
-        return <DiaryDiv key={diary.id} {...diary}></DiaryDiv>;
-      })} */}
       <Hydrate state={dehydratedState}>
         <InfiniteDiary></InfiniteDiary>
       </Hydrate>

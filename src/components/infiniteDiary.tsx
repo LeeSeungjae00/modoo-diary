@@ -39,6 +39,7 @@ export default function InfiniteDiary() {
         }, []),
       };
     },
+    suspense: true,
   });
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const intersecting = useIntersection(fetchMoreRef);
@@ -52,7 +53,6 @@ export default function InfiniteDiary() {
 
   return (
     <>
-      {" "}
       {data &&
         (isMobile ? (
           data.pages.map((diary) => {
