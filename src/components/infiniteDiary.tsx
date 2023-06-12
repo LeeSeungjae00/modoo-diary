@@ -76,13 +76,13 @@ export default function InfiniteDiary() {
             </div>
           </div>
         ))}
-      <div ref={fetchMoreRef} />
       {(isLoading || isFetching) && (
         <FontSpan className="pt-5">일기를 쓰고있어요...</FontSpan>
       )}
       {!(isLoading || isFetching) && !hasNextPage && (
         <p className="pt-5">🎉 모든 일기를 다 읽으셨어요.</p>
       )}
+      <div ref={fetchMoreRef} />
     </>
   );
 }
