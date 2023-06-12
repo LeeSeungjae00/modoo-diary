@@ -39,7 +39,6 @@ export default function InfiniteDiary() {
         }, []),
       };
     },
-    suspense: true,
   });
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const intersecting = useIntersection(fetchMoreRef);
