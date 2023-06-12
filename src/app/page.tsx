@@ -1,10 +1,7 @@
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
-import DiaryDiv from "@/components/diaryDiv";
-import { DiaryDivType } from "@/types/diary";
 import InfiniteDiary from "@/components/infiniteDiary";
-import { Hydrate, dehydrate, useQueryClient } from "@tanstack/react-query";
+import { Hydrate, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/lib/getQueryClient";
-import { Suspense } from "react";
 
 export type Products = {
   products: number[];
@@ -13,7 +10,7 @@ export type Products = {
 async function getFisrtDiaries() {
   const res = await fetch(
     `http://mingky.me:22001${API_ROUTE_DIARIES_GET}?offset=0`,
-    { cache: "no-store" }
+    { next: { revalidate: 0 } }
   )
     .then((res) => res.json())
     .then((res) => {
