@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { AuthContextProvider } from "@/context/authInfo.context";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -69,6 +70,7 @@ export default function RootLayout({
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </div>
         </AuthContextProvider>
+        <Analytics></Analytics>
       </body>
     </html>
   );
