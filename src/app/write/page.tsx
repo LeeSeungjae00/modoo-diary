@@ -29,20 +29,23 @@ export default function Write() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawAble, setIsDrawAble] = useState(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<DiaryType>();
-  const { mutate: write, isLoading } = useMutation({
+  const { mutate: write } = useMutation({
     mutationFn: postDiary,
     onSuccess: () => {
       router.push("/");
+      setIsLoading(false);
     },
   });
   const coordinate = useCoordinate();
 
   async function onSubmitWrite(data: DiaryType) {
+    setIsLoading(true);
     let resp = data;
     if (coordinate.loaded && !coordinate.error) {
       resp = {
