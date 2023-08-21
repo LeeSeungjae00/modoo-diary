@@ -39,8 +39,10 @@ export default function Write() {
     mutationFn: postDiary,
     onSuccess: () => {
       router.push("/");
-      setIsLoading(false);
     },
+    onError: () => {
+      setIsLoading(false);
+    }
   });
   const coordinate = useCoordinate();
 
