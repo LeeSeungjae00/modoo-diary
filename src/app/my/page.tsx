@@ -14,6 +14,7 @@ import { AuthContext } from "@/context/authInfo.context";
 import { API_ROUTE_MY_INFO } from "@/constants/api/members";
 import {
   getMyInfo,
+  getMyInfoSSR,
   patcNickname,
   patchEmail,
   patchRegion,

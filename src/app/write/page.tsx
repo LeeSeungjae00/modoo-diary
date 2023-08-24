@@ -42,7 +42,7 @@ export default function Write() {
     },
     onError: () => {
       setIsLoading(false);
-    }
+    },
   });
   const coordinate = useCoordinate();
 
@@ -56,14 +56,19 @@ export default function Write() {
       };
     }
 
-    if (isDrawAble) {
-      const canvasData = await uploadCanvasData();
-      resp = {
-        ...resp,
-        drawing: canvasData,
-      };
+    try {
+      if (isDrawAble) {
+        const canvasData = await uploadCanvasData();
+        resp = {
+          ...resp,
+          drawing: canvasData,
+        };
+      }
+      write(resp);
+    } catch (error) {
+      console.log("그림 업로드 실패");
+      setIsLoading(false);
     }
-    write(resp);
   }
 
   async function uploadCanvasData() {

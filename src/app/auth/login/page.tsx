@@ -12,6 +12,7 @@ import Link from "next/link";
 import { setAuthToken } from "@/lib/authUtill";
 import { AuthContext } from "@/context/authInfo.context";
 import jwtDecode from "jwt-decode";
+import { signIn } from "next-auth/react";
 
 export default function SignIn() {
   const router = useRouter();
@@ -22,18 +23,23 @@ export default function SignIn() {
 
     formState: { errors },
   } = useForm<SignInFormType>();
-  const { mutate: signIn, isError: dataFetchError } = useMutation({
-    mutationFn: postSignIn,
-    onSuccess: ({ data }) => {
-      setAuthToken(data.data);
-      router.push("/");
-      const payload = jwtDecode<AccessTokenPayload>(data.data.accessToken);
-      dispatch({ type: "SIGNIN", payload });
-    },
-  });
+  // const { mutate: signIn, isError: dataFetchError } = useMutation({
+  //   mutationFn: postSignIn,
+  //   onSuccess: ({ data }) => {
+  //     setAuthToken(data.data);
+  //     router.push("/");
+  //     const payload = jwtDecode<AccessTokenPayload>(data.data.accessToken);
+  //     dispatch({ type: "SIGNIN", payload });
+  //   },
+  // });
 
-  function onSubmitSignUp(data: SignInFormType) {
-    signIn(data);
+  async function onSubmitSignUp(data: SignInFormType) {
+    await signIn("id-pw-credential", {
+      username: data.loginId,
+      password: data.password,
+      callbackUrl: `http://localhost:3737`,
+    });
+    // signIn(data);
   }
 
   return (
@@ -112,9 +118,9 @@ export default function SignIn() {
         >
           일기 쓰러 가기
         </button>
-        {dataFetchError && (
+        {/* {dataFetchError && (
           <InputAlert message="아이디와 비밀번호를 확인해 주세요."></InputAlert>
-        )}
+        )} */}
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           계정이 없으신가요?{" "}
           <Link

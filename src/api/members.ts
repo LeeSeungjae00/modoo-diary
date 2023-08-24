@@ -10,6 +10,14 @@ export const getMyInfo = (memberId: string) => {
   return () => apiClient.get(API_ROUTE_MY_INFO.replace(":id", memberId));
 };
 
+export const getMyInfoSSR = async (memberId: string) => {
+  const res = await fetch(API_ROUTE_MY_INFO.replace(":id", memberId), {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  return data;
+};
+
 export const patchRegion = (data: { memberId: string; region: string }) => {
   return apiClient.patch(API_ROUTE_PATCH_REGION, data);
 };

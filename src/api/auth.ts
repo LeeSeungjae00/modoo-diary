@@ -4,6 +4,7 @@ import {
   API_ROUTE_AUTH_SIGNIN,
   API_ROUTE_AUTH_SIGNUP,
 } from "@/constants/api/auth";
+import axios from "axios";
 
 export const postSignUp = (formData: SignUpFormType) => {
   const config = {
@@ -18,7 +19,7 @@ export const postSignUp = (formData: SignUpFormType) => {
     region: formData.region,
   };
 
-  return apiClient.post(API_ROUTE_AUTH_SIGNUP, data, config);
+  return axios.post(API_ROUTE_AUTH_SIGNUP, data, config);
 };
 
 export const postSignIn = (formData: SignInFormType) => {
@@ -28,5 +29,5 @@ export const postSignIn = (formData: SignInFormType) => {
       password: formData.password,
     },
   };
-  return apiClient.post(API_ROUTE_AUTH_SIGNIN, null, config);
+  return axios.post(API_ROUTE_AUTH_SIGNIN, null, config);
 };

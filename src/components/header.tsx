@@ -6,6 +6,7 @@ import { getParsedToken, removeAuthToken } from "@/lib/authUtill";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/authInfo.context";
 import { FontSpan } from "./common/fontSpan";
+import { signIn } from "next-auth/react";
 
 const GlobalNav = styled.nav`
   position: absolute;
@@ -87,6 +88,9 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
+              <button onClick={() => signIn()} className="font-bold">
+                로그인 테스트
+              </button>
               <Link href="/auth/login" className="font-bold">
                 로그인
               </Link>

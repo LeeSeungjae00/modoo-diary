@@ -9,7 +9,7 @@ export type Products = {
 
 async function getFisrtDiaries() {
   const res = await fetch(
-    `http://mingky.me:22001${API_ROUTE_DIARIES_GET}?offset=0`,
+    `http://mingky.me:22001/api/diaries?offset=0`,
     { next: { revalidate: 0 } }
   )
     .then((res) => res.json())
