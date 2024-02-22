@@ -12,7 +12,5 @@ declare module "next-auth" {
         refreshToken : string,
     };
   }
-  
- 
 }
 

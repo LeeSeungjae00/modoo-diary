@@ -1,6 +1,7 @@
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -43,8 +44,9 @@ export default React.memo(function WellDoneButton({
 }) {
   const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
   const route = useRouter();
+  const session = useSession()
   const onClickWellDone = (diaryId: number) => {
-    if (isLogin) {
+    if (session.data?.user) {
       like(diaryId);
     } else {
       route.push("/auth/login");

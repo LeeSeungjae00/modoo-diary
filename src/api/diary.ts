@@ -8,6 +8,7 @@ import {
 import apiClient from "./modooClient";
 import { DiaryType, DiaryWriteType } from "@/types/diary";
 import { getParsedToken } from "@/lib/authUtill";
+import { getSession } from "next-auth/react";
 
 export const getDiary = (offset: number) => {
   const config = {
@@ -49,9 +50,9 @@ export const deletedDiary = (diaryId: number) => {
   );
 };
 
-export const putDiaryLike = (diaryId: number) => {
-  const memberId = Number(getParsedToken()?.sub);
-
+export const putDiaryLike = async (diaryId: number) => {
+  const session = await getSession();
+  
   const config = {
     params: {
       memberId,

@@ -8,8 +8,21 @@ import {
   setAuthToken,
 } from "@/lib/authUtill";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { getSession } from "next-auth/react";
 
 const apiClient = axios.create();
+
+(async () => {
+  const session = await getSession()
+
+apiClient.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+apiClient.defaults.headers.put["Content-Type"] = "application/json";
+apiClient.defaults.headers.common["Content-Type"] = "application/json";
+if (session?.user?.accessToken) {
+  apiClient.defaults.headers.common.Authorization = `Bearer ${session?.user.accessToken}`;
+}
+})()
+const session = getSession()
 
 apiClient.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 apiClient.defaults.headers.put["Content-Type"] = "application/json";
