@@ -50,9 +50,13 @@ export const deletedDiary = (diaryId: number) => {
   );
 };
 
-export const putDiaryLike = async (diaryId: number) => {
-  const session = await getSession();
-  
+export const putDiaryLike = async ({
+  diaryId,
+  memberId,
+}: {
+  diaryId: number;
+  memberId: number;
+}) => {
   const config = {
     params: {
       memberId,

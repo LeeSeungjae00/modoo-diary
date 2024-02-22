@@ -1,6 +1,9 @@
 import { postSignIn } from "@/api/auth";
 import { reissue } from "@/api/modooClient";
-import { API_ROUTE_AUTH_REISSUE, API_ROUTE_AUTH_SIGNIN } from "@/constants/api/auth";
+import {
+  API_ROUTE_AUTH_REISSUE,
+  API_ROUTE_AUTH_SIGNIN,
+} from "@/constants/api/auth";
 import { setAuthToken } from "@/lib/authUtill";
 import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
@@ -42,44 +45,45 @@ const handler = NextAuth({
             id: user.sub,
             name: user.nickName,
             role: user.role,
-            accessToken_exp : user.exp,
+            accessToken_exp: user.exp,
             accessToken: data.accessToken,
-            refreshToken : data.refreshToken,
+            refreshToken: data.refreshToken,
           };
         }
         return null;
       },
     }),
   ],
-  // 추가된 부분
   callbacks: {
-    async jwt({token, user}) {
-      if(token.accessToken_exp){
-        console.log("test", token)
+    async jwt({ token, user }) {
+      if (
+        token.accessToken_exp &&
+        (token.accessToken_exp as number) > Date.now() / 1000
+      ) {
+        console.log("test", token);
         const res = await fetch(
           `http://mingky.me:22001${API_ROUTE_AUTH_REISSUE}`,
           {
             method: "POST",
             headers: new Headers({
-              Authorization:
-                "Bearer " + token.accessToken
-                ,
+              Authorization: "Bearer " + token.accessToken,
               "Content-Type": "application/json",
-            }
-            ),
-            body : JSON.stringify({
+            }),
+            body: JSON.stringify({
               accessToken: token.accessToken,
-              refreshToken : token.refreshToken,
-            })
+              refreshToken: token.refreshToken,
+            }),
           }
         );
-        const {data} = await res.json();
+        const { data } = await res.json();
         const decode = jwtDecode<AccessTokenPayload>(data.accessToken);
         return {
-          ...token, ...data, exp : decode.exp
-        }
+          ...token,
+          ...data,
+          exp: decode.exp,
+        };
       }
-      return {...token, ...user};
+      return { ...token, ...user };
     },
 
     async session({ session, token }) {
@@ -95,6 +99,5 @@ const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 async function generateToken(user: any) {
-    console.log("test")
-  }
-
+  console.log("test");
+}

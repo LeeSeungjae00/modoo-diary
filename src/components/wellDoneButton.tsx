@@ -44,10 +44,10 @@ export default React.memo(function WellDoneButton({
 }) {
   const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
   const route = useRouter();
-  const session = useSession()
+  const { data: session } = useSession();
   const onClickWellDone = (diaryId: number) => {
-    if (session.data?.user) {
-      like(diaryId);
+    if (session?.user) {
+      like({ diaryId, memberId: session.user.id });
     } else {
       route.push("/auth/login");
     }

@@ -1,5 +1,4 @@
 import { SignInFormType, SignUpFormType } from "@/types/auth";
-import apiClient from "./modooClient";
 import {
   API_ROUTE_AUTH_SIGNIN,
   API_ROUTE_AUTH_SIGNUP,
