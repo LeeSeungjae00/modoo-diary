@@ -22,7 +22,6 @@ const apiClient = axios.create();
     apiClient.defaults.headers.common.Authorization = `Bearer ${session?.user.accessToken}`;
   }
 })();
-const session = getSession();
 
 apiClient.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 apiClient.defaults.headers.put["Content-Type"] = "application/json";
