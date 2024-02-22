@@ -11,4 +11,5 @@ export interface AccessTokenPayload {
   sub: string;
   nickName: string;
   role: string;
+  exp : number
 }

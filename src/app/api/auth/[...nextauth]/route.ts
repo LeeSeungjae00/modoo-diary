@@ -1,5 +1,6 @@
 import { postSignIn } from "@/api/auth";
-import { API_ROUTE_AUTH_SIGNIN } from "@/constants/api/auth";
+import { reissue } from "@/api/modooClient";
+import { API_ROUTE_AUTH_REISSUE, API_ROUTE_AUTH_SIGNIN } from "@/constants/api/auth";
 import { setAuthToken } from "@/lib/authUtill";
 import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
@@ -16,7 +17,7 @@ const handler = NextAuth({
         username: { type: "text" },
         password: { label: "Password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, _req) {
         const res = await fetch(
           `http://mingky.me:22001${API_ROUTE_AUTH_SIGNIN}`,
           {
@@ -34,27 +35,66 @@ const handler = NextAuth({
 
         const { data } = await res.json();
 
-        console.log(data);
-
-        setAuthToken(data);
-
         const user = jwtDecode<AccessTokenPayload>(data.accessToken);
 
-        if (res.status === 200) {
+        if (res.ok) {
           return {
             id: user.sub,
             name: user.nickName,
             role: user.role,
+            accessToken_exp : user.exp,
+            accessToken: data.accessToken,
+            refreshToken : data.refreshToken,
           };
         }
         return null;
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  // 추가된 부분
+  callbacks: {
+    async jwt({token, user}) {
+      if(token.accessToken_exp){
+        console.log("test", token)
+        const res = await fetch(
+          `http://mingky.me:22001${API_ROUTE_AUTH_REISSUE}`,
+          {
+            method: "POST",
+            headers: new Headers({
+              Authorization:
+                "Bearer " + token.accessToken
+                ,
+              "Content-Type": "application/json",
+            }
+            ),
+            body : JSON.stringify({
+              accessToken: token.accessToken,
+              refreshToken : token.refreshToken,
+            })
+          }
+        );
+        const {data} = await res.json();
+        const decode = jwtDecode<AccessTokenPayload>(data.accessToken);
+        return {
+          ...token, ...data, exp : decode.exp
+        }
+      }
+      return {...token, ...user};
+    },
+
+    async session({ session, token }) {
+      session.user = token as any;
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/login",
   },
 });
 
 export { handler as GET, handler as POST };
+async function generateToken(user: any) {
+    console.log("test")
+  }
+

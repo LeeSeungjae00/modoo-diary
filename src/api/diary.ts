@@ -9,7 +9,7 @@ import apiClient from "./modooClient";
 import { DiaryType, DiaryWriteType } from "@/types/diary";
 import { getParsedToken } from "@/lib/authUtill";
 
-export const getDiarys = (offset: number) => {
+export const getDiary = (offset: number) => {
   const config = {
     params: {
       offset,
