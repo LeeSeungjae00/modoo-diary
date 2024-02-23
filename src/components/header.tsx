@@ -1,12 +1,10 @@
 "use client";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { getParsedToken, removeAuthToken } from "@/lib/authUtill";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "@/context/authInfo.context";
 import { FontSpan } from "./common/fontSpan";
-import { signIn } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const GlobalNav = styled.nav`
   position: absolute;
@@ -36,7 +34,7 @@ const LocalNav = styled.nav<{ isSticky: boolean }>`
 
 export default function Header() {
   const router = useRouter();
-  const { state, dispatch } = useContext(AuthContext);
+  const {data :session} = useSession()
   const [isSticky, setIsSticky] = useState(false);
   const onScroll = useCallback(() => {
     const { scrollY } = window;
@@ -45,7 +43,7 @@ export default function Header() {
     } else {
       setIsSticky(true);
     }
-  }, []);
+  }, [setIsSticky]);
 
   useEffect(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -57,8 +55,7 @@ export default function Header() {
 
   const logout = () => {
     router.push("/");
-    removeAuthToken();
-    dispatch({ type: "SIGNOOUT", payload: undefined });
+    signOut()
   };
 
   return (
@@ -67,17 +64,17 @@ export default function Header() {
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="font-bold text-lg flex">
             ✎
-            {state.isLogin?.nickName
+            {session?.user.name
               ? (
                   <FontSpan className="text-lg">
                     {" "}
-                    {state.isLogin.nickName}
+                    {session.user.name}
                   </FontSpan>
                 ) || ""
               : " 모두"}
             의 일기
           </Link>
-          {state.isLogin ? (
+          {session ? (
             <div className="flex gap-2">
               <Link href="/my" className="font-bold">
                 내 정보
@@ -88,9 +85,6 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
-              <button onClick={() => signIn()} className="font-bold">
-                로그인 테스트
-              </button>
               <Link href="/auth/login" className="font-bold">
                 로그인
               </Link>
@@ -102,7 +96,7 @@ export default function Header() {
         </div>
       </GlobalNav>
       <LocalNav isSticky={isSticky}>
-        {state.isLogin ? (
+        {session ? (
           <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
             <Link href="/write" className="font-bold">
               일기 쓰기 ✎

@@ -1,45 +1,26 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React, { useContext, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { postSignIn } from "@/api/auth";
-import { AccessTokenPayload, SignInFormType } from "@/types/auth";
-import { useRouter } from "next/navigation";
+import { SignInFormType } from "@/types/auth";
 import InputAlert from "@/components/common/inputAlert";
 import Link from "next/link";
-import { setAuthToken } from "@/lib/authUtill";
-import { AuthContext } from "@/context/authInfo.context";
-import jwtDecode from "jwt-decode";
 import { signIn } from "next-auth/react";
 
 export default function SignIn() {
-  const router = useRouter();
-  const { dispatch } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm<SignInFormType>();
-  // const { mutate: signIn, isError: dataFetchError } = useMutation({
-  //   mutationFn: postSignIn,
-  //   onSuccess: ({ data }) => {
-  //     setAuthToken(data.data);
-  //     router.push("/");
-  //     const payload = jwtDecode<AccessTokenPayload>(data.data.accessToken);
-  //     dispatch({ type: "SIGNIN", payload });
-  //   },
-  // });
+
 
   async function onSubmitSignUp(data: SignInFormType) {
     await signIn("id-pw-credential", {
       username: data.loginId,
       password: data.password,
-      callbackUrl: `http://localhost:3737`,
     });
-    // signIn(data);
   }
 
   return (

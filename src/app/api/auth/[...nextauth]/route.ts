@@ -1,10 +1,4 @@
-import { postSignIn } from "@/api/auth";
-import { reissue } from "@/api/modooClient";
-import {
-  API_ROUTE_AUTH_REISSUE,
-  API_ROUTE_AUTH_SIGNIN,
-} from "@/constants/api/auth";
-import { setAuthToken } from "@/lib/authUtill";
+import { postSignIn, reissue } from "@/api/auth";
 import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
 import NextAuth from "next-auth";
@@ -21,36 +15,32 @@ const handler = NextAuth({
         password: { label: "Password" },
       },
       async authorize(credentials, _req) {
-        const res = await fetch(
-          `http://mingky.me:22001${API_ROUTE_AUTH_SIGNIN}`,
-          {
-            method: "POST",
-            headers: new Headers({
-              Authorization:
-                "Basic " +
-                Buffer.from(
-                  credentials!.username + ":" + credentials!.password
-                ).toString("base64"),
-              "Content-Type": "application/json",
-            }),
+        try {
+          if (!credentials) {
+            return null;
           }
-        );
 
-        const { data } = await res.json();
-
-        const user = jwtDecode<AccessTokenPayload>(data.accessToken);
-
-        if (res.ok) {
-          return {
-            id: user.sub,
-            name: user.nickName,
-            role: user.role,
-            accessToken_exp: user.exp,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
-          };
+          const { data } = await postSignIn({
+            loginId: credentials.username,
+            password: credentials.password,
+          });
+          
+          if (data.accessToken && data.refreshToken) {
+            const user = jwtDecode<AccessTokenPayload>(data.accessToken);
+            return {
+              id: user.sub,
+              name: user.nickName,
+              role: user.role,
+              accessToken_exp: user.exp,
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            };
+          }
+          return null;
+        } catch (e) {
+          console.error(e);
+          return null;
         }
-        return null;
       },
     }),
   ],
@@ -58,24 +48,10 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (
         token.accessToken_exp &&
-        (token.accessToken_exp as number) > Date.now() / 1000
+        (token.accessToken_exp as number) < Date.now() / 1000
       ) {
-        console.log("test", token);
-        const res = await fetch(
-          `http://mingky.me:22001${API_ROUTE_AUTH_REISSUE}`,
-          {
-            method: "POST",
-            headers: new Headers({
-              Authorization: "Bearer " + token.accessToken,
-              "Content-Type": "application/json",
-            }),
-            body: JSON.stringify({
-              accessToken: token.accessToken,
-              refreshToken: token.refreshToken,
-            }),
-          }
-        );
-        const { data } = await res.json();
+        const { data } = await reissue(token.accessToken as string, token.refreshToken as string);
+        console.log("token refresh");
         const decode = jwtDecode<AccessTokenPayload>(data.accessToken);
         return {
           ...token,
@@ -98,6 +74,3 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
-async function generateToken(user: any) {
-  console.log("test");
-}
