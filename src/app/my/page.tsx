@@ -1,37 +1,25 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { postSignUp } from "@/api/auth";
-import { AccessTokenPayload, SignUpFormType } from "@/types/auth";
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import InputAlert from "@/components/common/inputAlert";
 import Radio from "@/components/common/radio";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { AuthContext } from "@/context/authInfo.context";
 import { API_ROUTE_MY_INFO } from "@/constants/api/members";
 import {
   getMyInfo,
-  getMyInfoSSR,
   patcNickname,
   patchEmail,
   patchRegion,
 } from "@/api/members";
 import FormContentSkeleton from "@/components/common/formContentSkeleton";
-import apiClient, { reissue } from "@/api/modooClient";
-import { API_ROUTE_AUTH_REISSUE } from "@/constants/api/auth";
-import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-  setAuthToken,
-} from "@/lib/authUtill";
-import jwtDecode from "jwt-decode";
-import { ToastContainer, Zoom, toast } from "react-toastify";
+import { signIn, useSession } from "next-auth/react";
 
 export default function My() {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const { data: session } = useSession();
   const {
     register,
     formState: { errors },
@@ -42,10 +30,9 @@ export default function My() {
     nickName: string;
     email: string;
   }>();
-  const { state, dispatch } = useContext(AuthContext);
   const { data, isLoading } = useQuery({
-    queryKey: [API_ROUTE_MY_INFO, state.isLogin?.sub],
-    queryFn: getMyInfo(state.isLogin?.sub || ""),
+    queryKey: [API_ROUTE_MY_INFO, session?.user.id],
+    queryFn: getMyInfo(session?.user.id.toString() || ""),
     select: (res) => res.data.data,
     onSuccess: (data) => {
       setValue("nickName", data.nickName);
@@ -57,45 +44,32 @@ export default function My() {
   const { mutate: updateRegion } = useMutation({
     mutationFn: patchRegion,
     onSuccess: () => {
-      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      if (refreshToken) {
-        reissue({
-          accessToken,
-          refreshToken,
-        }).then((res) => {
-          const { accessToken: newAccessToken } = res.data.data;
-          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
-          dispatch({ type: "SIGNIN", payload });
-          toast(<p className="text-center">지역이 변경되었습니다.</p>);
-        });
-      }
+      setSuccessMessage("지역이 변경되었습니다");
+      signIn("token-reissue-credential", {
+        accessToken: session?.user.accessToken,
+        refreshToken: session?.user.refreshToken,
+        redirect: false,
+      });
+      setErrorMessage("");
     },
     onError: (error: any) => {
-      // console.log();
-      setErrorMessage(error?.response?.data.error.code || "");
+      console.log(error);
+      setErrorMessage(error?.response?.data.error || "");
     },
   });
 
   const { mutate: updateEmail } = useMutation({
     mutationFn: patchEmail,
     onSuccess: () => {
-      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      if (refreshToken) {
-        reissue({
-          accessToken,
-          refreshToken,
-        }).then((res) => {
-          const { accessToken: newAccessToken } = res.data.data;
-          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
-          dispatch({ type: "SIGNIN", payload });
-          toast(<p className="text-center">이메일이 변경되었습니다.</p>);
-        });
-      }
+      setSuccessMessage("이메일이 변경되었습니다");
+      signIn("token-reissue-credential", {
+        accessToken: session?.user.accessToken,
+        refreshToken: session?.user.refreshToken,
+        redirect: false,
+      });
+      setErrorMessage("");
     },
     onError: (error: any) => {
-      // console.log();
       setErrorMessage(error?.response?.data.error.code || "");
     },
   });
@@ -103,23 +77,17 @@ export default function My() {
   const { mutate: updateNickname } = useMutation({
     mutationFn: patcNickname,
     onSuccess: () => {
-      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      if (refreshToken) {
-        reissue({
-          accessToken,
-          refreshToken,
-        }).then((res) => {
-          const { accessToken: newAccessToken } = res.data.data;
-          const payload = jwtDecode<AccessTokenPayload>(newAccessToken);
-          dispatch({ type: "SIGNIN", payload });
-          toast(<p className="text-center">닉네임이 변경되었습니다.</p>);
-        });
-      }
+      setSuccessMessage("닉네임이 변경되었습니다");
+      signIn("token-reissue-credential", {
+        accessToken: session?.user.accessToken,
+        refreshToken: session?.user.refreshToken,
+        redirect: false,
+      });
+      setErrorMessage("");
     },
     onError: (error: any) => {
-      // console.log();
-      setErrorMessage(error?.response?.data.error.code || "");
+      console.log(error);
+      setErrorMessage(error?.response?.data.error || "");
     },
   });
 
@@ -144,9 +112,9 @@ export default function My() {
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={() => {
-                  if (state.isLogin?.sub) {
+                  if (session) {
                     updateEmail({
-                      memberId: state.isLogin.sub,
+                      memberId: session.user.id.toString(),
                       email: getValues("email"),
                     });
                   }
@@ -172,9 +140,9 @@ export default function My() {
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={() => {
-                  if (state.isLogin?.sub) {
+                  if (session) {
                     updateNickname({
-                      memberId: state.isLogin.sub,
+                      memberId: session.user.id.toString(),
                       nickName: getValues("nickName"),
                     });
                   }
@@ -203,7 +171,7 @@ export default function My() {
                         required: "지역을 선택해 주세요",
                       }),
                     },
-                    lable: "서울",
+                    label: "서울",
                   },
                   {
                     inputArg: {
@@ -212,7 +180,7 @@ export default function My() {
                         required: "지역을 선택해 주세요",
                       }),
                     },
-                    lable: "부산",
+                    label: "부산",
                   },
                   {
                     inputArg: {
@@ -221,7 +189,7 @@ export default function My() {
                         required: "지역을 선택해 주세요",
                       }),
                     },
-                    lable: "인천",
+                    label: "인천",
                   },
                   {
                     inputArg: {
@@ -230,7 +198,7 @@ export default function My() {
                         required: "지역을 선택해 주세요",
                       }),
                     },
-                    lable: "울산",
+                    label: "울산",
                   },
                   {
                     inputArg: {
@@ -239,7 +207,7 @@ export default function My() {
                         required: "지역을 선택해 주세요",
                       }),
                     },
-                    lable: "광주",
+                    label: "광주",
                   },
                 ]}
               ></Radio>
@@ -248,9 +216,9 @@ export default function My() {
                 type="button"
                 className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={() => {
-                  if (state.isLogin?.sub) {
+                  if (session) {
                     updateRegion({
-                      memberId: state.isLogin.sub,
+                      memberId: session.user.id.toString(),
                       region: getValues("region"),
                     });
                   }
@@ -265,19 +233,12 @@ export default function My() {
           <InputAlert message={errors.region.message as string}></InputAlert>
         )}
         {errorMessage && <InputAlert message={errorMessage}></InputAlert>}
-        <ToastContainer
-          position="bottom-center"
-          autoClose={500}
-          hideProgressBar
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          transition={Zoom}
-          draggable={false}
-          pauseOnHover
-          theme="light"
-        />
+        <br></br>
+        {successMessage && (
+          <small className="text-blue-500" role="alert">
+            {successMessage}
+          </small>
+        )}
       </div>
     </div>
   );

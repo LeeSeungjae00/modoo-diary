@@ -20,6 +20,7 @@ export default function SignIn() {
     await signIn("id-pw-credential", {
       username: data.loginId,
       password: data.password,
+      callbackUrl: `/`,
     });
   }
 

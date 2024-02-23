@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
