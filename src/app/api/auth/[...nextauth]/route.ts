@@ -1,10 +1,10 @@
 import { postSignIn, reissue } from "@/api/auth";
 import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+export const authOption: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: "id-pw-credential",
@@ -111,6 +111,8 @@ const handler = NextAuth({
   pages: {
     signIn: "/auth/login",
   },
-});
+};
+
+const handler = NextAuth(authOption);
 
 export { handler as GET, handler as POST };
