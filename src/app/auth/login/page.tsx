@@ -1,27 +1,38 @@
 "use client";
 import Input from "@/components/common/input";
 import Label from "@/components/common/label";
-import React from "react";
+import React, { use } from "react";
 import { useForm } from "react-hook-form";
 import { SignInFormType } from "@/types/auth";
 import InputAlert from "@/components/common/inputAlert";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { tr } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignInFormType>();
-
+  const router = useRouter();
 
   async function onSubmitSignUp(data: SignInFormType) {
-    await signIn("id-pw-credential", {
+    const a = await signIn("id-pw-credential", {
       username: data.loginId,
       password: data.password,
-      callbackUrl: `/`,
+      redirect: false,
     });
+    if (!a?.ok) {
+      setError("root", {
+        type: "manual",
+        message: "아이디와 비밀번호를 확인해 주세요.",
+      });
+    } else {
+      router.replace("/");
+    }
   }
 
   return (
@@ -100,9 +111,9 @@ export default function SignIn() {
         >
           일기 쓰러 가기
         </button>
-        {/* {dataFetchError && (
-          <InputAlert message="아이디와 비밀번호를 확인해 주세요."></InputAlert>
-        )} */}
+        {errors.root && (
+          <InputAlert message={errors.root.message as string}></InputAlert>
+        )}
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           계정이 없으신가요?{" "}
           <Link

@@ -2,22 +2,22 @@ import React from "react";
 import MyForm from "@/components/client/my/MyForm";
 import { getServerSession } from "next-auth";
 import { getMyInfoSSR } from "@/api/members";
-import { getToken } from "next-auth/jwt";
 import { authOption } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export default async function My() {
   const session = await getServerSession(authOption);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
+    redirect(`/auth/login`);
   }
 
   const { data } = await getMyInfoSSR(session.user.id.toString());
+
+  if (!data) {
+    signOut();
+  }
 
   return (
     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
