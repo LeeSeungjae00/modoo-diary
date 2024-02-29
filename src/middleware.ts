@@ -8,11 +8,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/login", request.url));
   }
 
-  const response = NextResponse.next();
+  // const response = NextResponse.next();
 
-  console.log(session.accessToken);
+  // response.headers.set("Authorization", `Bearer ${session.accessToken}`);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("Authorization", `Bearer ${session.accessToken}`);
 
-  response.headers.set("Authorization", `Bearer ${session.accessToken}`);
+  // You can also set request headers in NextResponse.rewrite
+  const response = NextResponse.next({
+    request: {
+      // New request headers
+      headers: requestHeaders,
+    },
+  });
 
   return response;
 }
