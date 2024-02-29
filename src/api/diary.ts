@@ -68,9 +68,13 @@ export const putDiaryLike = async ({
   return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT, null, config);
 };
 
-export const putDiaryUnLike = (diaryId: number) => {
-  const memberId = Number(getParsedToken()?.sub);
-
+export const putDiaryUnLike = ({
+  diaryId,
+  memberId,
+}: {
+  diaryId: number;
+  memberId: number;
+}) => {
   const config = {
     params: {
       memberId,

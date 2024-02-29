@@ -26,7 +26,6 @@ const useLikeMutation = (id: number) => {
             if (findedIndex > -1) {
               const newdata = page.data.map((val) => {
                 if (val.id === diaryId) {
-                  console.log("teswt");
                   return {
                     ...val,
                     recommendCount: val.recommendCount + 1,

@@ -1,7 +1,7 @@
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -49,7 +49,9 @@ export default React.memo(function WellDoneButton({
     if (session?.user) {
       like({ diaryId, memberId: session.user.id });
     } else {
-      route.push("/auth/login");
+      signOut({
+        callbackUrl: "/auth/login",
+      });
     }
   };
   return (

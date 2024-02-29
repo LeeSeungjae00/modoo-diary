@@ -7,7 +7,6 @@ import { SignInFormType } from "@/types/auth";
 import InputAlert from "@/components/common/inputAlert";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { tr } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
@@ -17,7 +16,6 @@ export default function SignIn() {
     setError,
     formState: { errors },
   } = useForm<SignInFormType>();
-  const router = useRouter();
 
   async function onSubmitSignUp(data: SignInFormType) {
     const a = await signIn("id-pw-credential", {
