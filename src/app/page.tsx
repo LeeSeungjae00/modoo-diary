@@ -7,11 +7,10 @@ export type Products = {
   products: number[];
 };
 
-async function getFisrtDiaries() {
-  const res = await fetch(
-    `http://mingky.me:22001${API_ROUTE_DIARIES_GET}?offset=0`,
-    { next: { revalidate: 0 } }
-  )
+async function getFirstDiaries() {
+  const res = await fetch(`http://mingky.me:22001/api/diaries?offset=0`, {
+    next: { revalidate: 0 },
+  })
     .then((res) => res.json())
     .then((res) => {
       return {
@@ -25,7 +24,7 @@ export default async function Home() {
   const queryClient = getQueryClient();
   await queryClient.prefetchInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],
-    queryFn: () => getFisrtDiaries(),
+    queryFn: () => getFirstDiaries(),
   });
 
   const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));

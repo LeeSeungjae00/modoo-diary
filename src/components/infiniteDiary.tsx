@@ -1,5 +1,5 @@
 "use client";
-import { getDiarys } from "@/api/diary";
+import { getDiary } from "@/api/diary";
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import useIntersection from "@/hooks/useIntersection";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ export default function InfiniteDiary() {
     isFetching,
   } = useInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],
-    queryFn: ({ pageParam = 1 }) => getDiarys(pageParam),
+    queryFn: ({ pageParam = 1 }) => getDiary(pageParam),
     getNextPageParam: (lastPage) => {
       const nowPage = lastPage.number + 1;
       if (nowPage < lastPage.totalPages) {

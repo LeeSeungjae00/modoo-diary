@@ -1,5 +1,5 @@
-export const API_ROUTE_DIARIES_GET = "/api/diaries";
-export const API_ROUTE_DIARIES_POST = "/api/diaries";
-export const API_ROUTE_DIARIES_PATCH = "/api/diaries/:id";
-export const API_ROUTE_DIARIES_DELETE = "/api/diaries/:id";
-export const API_ROUTE_DIARIES_STICKER_PUT = "/api/diaries/sticker";
+export const API_ROUTE_DIARIES_GET = "/java/api/diaries";
+export const API_ROUTE_DIARIES_POST = "/java/api/diaries";
+export const API_ROUTE_DIARIES_PATCH = "/java/api/diaries/:id";
+export const API_ROUTE_DIARIES_DELETE = "/java/api/diaries/:id";
+export const API_ROUTE_DIARIES_STICKER_PUT = "/java/api/diaries/sticker";

@@ -43,3 +43,9 @@ export interface DiaryPageType {
   updatedTime: string;
   unlikeCount: number;
 }
+
+export interface MyInfoType {
+  region: string;
+  nickName: string;
+  email: string;
+}

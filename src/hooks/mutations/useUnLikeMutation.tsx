@@ -8,7 +8,7 @@ const useUnLikeMutation = (id: number) => {
 
   return useMutation({
     mutationFn: putDiaryUnLike,
-    onMutate: async (data) => {
+    onMutate: async ({ diaryId }) => {
       await queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
 
       const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
@@ -21,14 +21,16 @@ const useUnLikeMutation = (id: number) => {
           const { pageParams, pages } = old;
 
           const newPages = pages.map((page) => {
-            const findedIndex = page.data.findIndex((val) => val.id === data);
+            const findedIndex = page.data.findIndex(
+              (val) => val.id === diaryId
+            );
 
             if (findedIndex > -1) {
               const newdata = page.data.map((val) => {
-                if (val.id === data) {
+                if (val.id === diaryId) {
                   return {
                     ...val,
-                    unlikeCount: ++val.unlikeCount,
+                    unlikeCount: val.unlikeCount + 1,
                   };
                 }
                 return val;
