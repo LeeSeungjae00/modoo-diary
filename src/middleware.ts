@@ -4,18 +4,19 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const session = await getToken({ req: request });
-  if(!session){
-    return NextResponse.rewrite(new URL("/login", request.url))
+  if (!session) {
+    return NextResponse.rewrite(new URL("/login", request.url));
   }
 
-  const response = NextResponse.next()
-  response.headers.set('Authorization', `Bearer ${session.accessToken}`)
+  const response = NextResponse.next();
 
-  return response
+  console.log(session.accessToken);
+
+  response.headers.set("Authorization", `Bearer ${session.accessToken}`);
+
+  return response;
 }
 
 export const config = {
-  matcher : [
-    "/java/api/:path*"
-  ]
-}
+  matcher: ["/java/api/:path*"],
+};

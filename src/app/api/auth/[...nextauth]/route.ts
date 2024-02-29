@@ -27,6 +27,7 @@ export const authOption: NextAuthOptions = {
 
           if (data.accessToken && data.refreshToken) {
             const user = jwtDecode<AccessTokenPayload>(data.accessToken);
+            console.log(data.accessToken);
             return {
               id: user.sub,
               name: user.nickName,
