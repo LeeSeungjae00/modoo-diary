@@ -24,7 +24,6 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* <AuthContextProvider> */}
         <AuthSessionProvider>
-          {/* @ts-expect-error Server Component */}
           <Header></Header>
           <div className="max-w-5xl mx-auto w-screen min-h-screen">
             <ReactQueryProvider>{children}</ReactQueryProvider>

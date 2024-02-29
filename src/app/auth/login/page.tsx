@@ -9,7 +9,6 @@ export default async function SignIn() {
   const session = await getServerSession(authOption);
 
   if (session?.user) {
-    console.log(session?.user);
     redirect("/");
   }
 
