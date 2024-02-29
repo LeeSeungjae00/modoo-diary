@@ -1,8 +1,10 @@
-import { SignInFormType } from "@/types/auth";
+import { SignInFormType, SignUpFormType } from "@/types/auth";
 import {
   API_ROUTE_AUTH_REISSUE,
   API_ROUTE_AUTH_SIGNIN,
+  API_ROUTE_AUTH_SIGNUP,
 } from "@/constants/api/auth";
+import apiClient from "./modooClient";
 
 export const postSignIn = async (data: SignInFormType) => {
   const res = await fetch(
@@ -38,4 +40,20 @@ export const reissue = async (accessToken: string, refreshToken: string) => {
   );
 
   return await res.json();
-}
+};
+
+export const postSignUp = (formData: SignUpFormType) => {
+  const config = {
+    auth: {
+      username: formData.loginId,
+      password: formData.password,
+    },
+  };
+
+  const data = {
+    nickName: formData.nickName,
+    region: formData.region,
+  };
+
+  return apiClient.post(API_ROUTE_AUTH_SIGNUP, data, config);
+};

@@ -25,14 +25,14 @@ export default function SignIn() {
       password: data.password,
       redirect: false,
     });
-    if (!a?.ok) {
+    if (a?.error) {
       setError("root", {
         type: "manual",
         message: "아이디와 비밀번호를 확인해 주세요.",
       });
-    } else {
-      router.replace("/");
+      return;
     }
+    window.location.href = "/";
   }
 
   return (

@@ -1,13 +1,9 @@
-import Head from "next/head";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Header from "@/components/header";
+import Header from "@/components/server/common/header";
 import ReactQueryProvider from "./reactQueryProvider";
-import { AuthContextProvider } from "@/context/authInfo.context";
-import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,13 +22,14 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
+        {/* <AuthContextProvider> */}
         <AuthSessionProvider>
-          <AuthContextProvider>
-            <Header></Header>
-            <div className="max-w-5xl mx-auto w-screen min-h-screen">
-              <ReactQueryProvider>{children}</ReactQueryProvider>
-            </div>
-          </AuthContextProvider>
+          {/* @ts-expect-error Server Component */}
+          <Header></Header>
+          <div className="max-w-5xl mx-auto w-screen min-h-screen">
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </div>
+          {/* </AuthContextProvider> */}
         </AuthSessionProvider>
         <Analytics></Analytics>
       </body>

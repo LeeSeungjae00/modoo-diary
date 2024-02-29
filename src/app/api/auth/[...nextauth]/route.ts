@@ -97,7 +97,7 @@ export const authOption: NextAuthOptions = {
         return {
           ...token,
           ...data,
-          exp: decode.exp,
+          accessToken_exp: decode.exp,
         };
       }
       return { ...token, ...user };
