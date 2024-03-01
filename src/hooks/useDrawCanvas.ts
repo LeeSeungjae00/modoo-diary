@@ -86,6 +86,15 @@ export default function useDrawCanvas(
       if (painting) getCtx.clearRect(mouseX - 5, mouseY - 5, 10, 10);
     }
   };
+  const eraseMobileFn = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const { x, y } = getMousePos(canvasRef, e);
+    const mouseX = x;
+    const mouseY = y;
+    // erasing
+    if (getCtx) {
+      if (painting) getCtx.clearRect(mouseX - 5, mouseY - 5, 10, 10);
+    }
+  };
 
   const colorChange = (color: string) => {
     const canvas = canvasRef.current;
@@ -104,6 +113,7 @@ export default function useDrawCanvas(
     setPainting,
     drawFn,
     eraseFn,
+    eraseMobileFn,
     isDraw,
     drawMobileFn,
     clearCanvas,

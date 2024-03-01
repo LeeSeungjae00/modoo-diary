@@ -19,19 +19,13 @@ export default function Canvas({
     setPainting,
     isDraw,
     drawFn,
-    eraseFn,
     drawMobileFn,
+    eraseFn,
+    eraseMobileFn,
     colorChange,
     setIsDraw,
     clearCanvas,
   } = useDrawCanvas(canvasRef);
-  const [color, setColor] = React.useState<string>("#000000");
-  const onClickColor = (e: React.MouseEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    setColor(target.value);
-    colorChange(target.value);
-    setIsDraw(true);
-  };
 
   return (
     <>
@@ -52,7 +46,7 @@ export default function Canvas({
               enableBodyScroll(body);
               setPainting(false);
             }}
-            onTouchMove={drawMobileFn}
+            onTouchMove={isDraw ? drawMobileFn : eraseMobileFn}
             width="300"
             height="200"
           ></canvas>
