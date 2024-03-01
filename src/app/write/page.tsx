@@ -9,13 +9,9 @@ import InputAlert from "@/components/common/inputAlert";
 import { postDiary } from "@/api/diary";
 import FontButton from "@/components/common/fontButton";
 import useCoordinate from "@/hooks/useCoordinate";
-import Canvas from "@/components/canvas";
+import Canvas from "@/components/client/write/Canvas";
 import axios from "axios";
 import dataURItoBlob from "@/lib/dataURItoBlob";
-
-const FontH1 = styled.h1`
-  font-family: Chilgok_lws;
-`;
 
 const FontTextarea = styled.textarea`
   font-family: Chilgok_lws;
@@ -93,7 +89,7 @@ export default function Write() {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-32 mx-auto min-h-screen">
       {isLoading ? (
-        <FontH1>참 잘했어요</FontH1>
+        <h1 className="font-Chilgok">참 잘했어요</h1>
       ) : (
         <>
           <label className="relative inline-flex items-center cursor-pointer mb-2">
@@ -113,7 +109,7 @@ export default function Write() {
               onSubmit={handleSubmit(onSubmitWrite)}
               className="p-6 space-y-4 md:space-y-6 sm:p-8"
             >
-              <FontH1 className=" text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white flex">
+              <h1 className="font-Chilgok text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white flex">
                 <p className="min-w-fit">제목:</p>
                 <input
                   {...register("title", {
@@ -122,7 +118,7 @@ export default function Write() {
                   className="ml-2 focus:border-none"
                   placeholder="즐거운 하루"
                 ></input>
-              </FontH1>
+              </h1>
               {errors.title && (
                 <InputAlert
                   message={errors.title.message as string}
