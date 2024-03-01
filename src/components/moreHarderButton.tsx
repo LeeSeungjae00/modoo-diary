@@ -2,6 +2,7 @@ import useLikeMutation from "@/hooks/mutations/useLikeMutation";
 import useUnLikeMutation from "@/hooks/mutations/useUnLikeMutation";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -44,11 +45,14 @@ export default React.memo(function MoreHarderButton({
 }) {
   const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
   const route = useRouter();
+  const { data: session } = useSession();
   const onClickMoreHarder = (diaryId: number) => {
-    if (isLogin) {
-      unLike(diaryId);
+    if (session?.user) {
+      unLike({ diaryId, memberId: session.user.id });
     } else {
-      route.push("/auth/login");
+      signOut({
+        callbackUrl: "/auth/login",
+      });
     }
   };
   return (

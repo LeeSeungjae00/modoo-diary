@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    appDir: true
+  },
   async rewrites() {
     return [
       {
-        source: "/:path*",
-        destination: "http://mingky.me:22001/:path*",
+        source: "/java/:slug*",
+        destination: "http://mingky.me:22001/:slug*",
       },
     ];
   },

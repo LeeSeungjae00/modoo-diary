@@ -132,7 +132,7 @@ export default function SignUp() {
                     required: "지역을 선택해 주세요",
                   }),
                 },
-                lable: "서울",
+                label: "서울",
               },
               {
                 inputArg: {
@@ -141,7 +141,7 @@ export default function SignUp() {
                     required: "지역을 선택해 주세요",
                   }),
                 },
-                lable: "부산",
+                label: "부산",
               },
               {
                 inputArg: {
@@ -150,7 +150,7 @@ export default function SignUp() {
                     required: "지역을 선택해 주세요",
                   }),
                 },
-                lable: "인천",
+                label: "인천",
               },
               {
                 inputArg: {
@@ -159,7 +159,7 @@ export default function SignUp() {
                     required: "지역을 선택해 주세요",
                   }),
                 },
-                lable: "울산",
+                label: "울산",
               },
               {
                 inputArg: {
@@ -168,7 +168,7 @@ export default function SignUp() {
                     required: "지역을 선택해 주세요",
                   }),
                 },
-                lable: "광주",
+                label: "광주",
               },
             ]}
           ></Radio>
