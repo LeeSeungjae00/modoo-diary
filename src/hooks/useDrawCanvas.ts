@@ -94,6 +94,7 @@ export default function useDrawCanvas(
     if (getCtx) {
       if (painting) getCtx.clearRect(mouseX - 5, mouseY - 5, 10, 10);
     }
+    setPainting(true);
   };
 
   const colorChange = (color: string) => {
