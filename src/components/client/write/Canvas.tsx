@@ -1,9 +1,10 @@
-// react
-import React, { useRef, useEffect, useState } from "react";
-import FontButton from "./common/fontButton";
+"use client";
+
+import React from "react";
+import FontButton from "../../common/fontButton";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import useDrawCanvas from "@/hooks/useDrawCanvas";
-// style
+import Pallet from "./Pallet";
 
 export const CANVAS_WIDTH = 300;
 export const CANVAS_HEIGHT = 200;
@@ -24,6 +25,13 @@ export default function Canvas({
     setIsDraw,
     clearCanvas,
   } = useDrawCanvas(canvasRef);
+  const [color, setColor] = React.useState<string>("#000000");
+  const onClickColor = (e: React.MouseEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    setColor(target.value);
+    colorChange(target.value);
+    setIsDraw(true);
+  };
 
   return (
     <>
@@ -50,32 +58,19 @@ export default function Canvas({
           ></canvas>
         </div>
       </div>
-      <button type="button" onClick={() => colorChange("#b7b7b7")}>
-        연필
-      </button>
-      <button type="button" onClick={() => colorChange("#010101")}>
-        검정펜
-      </button>
-      <button type="button" onClick={() => colorChange("#ff2a2a")}>
-        빨간펜
-      </button>
-      <button type="button" onClick={() => colorChange("#1582ff")}>
-        파란펜
-      </button>
-      <button type="button" onClick={() => colorChange("#00720d")}>
-        초록펜
-      </button>
-      <button type="button" onClick={() => colorChange("#ffffff")}>
-        하얀펜
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setIsDraw(false);
-        }}
-      >
-        지우개
-      </button>
+      <Pallet
+        colorChange={colorChange}
+        isDraw={isDraw}
+        setIsDraw={setIsDraw}
+        colors={[
+          "#000000",
+          "#6b7280",
+          "#ffffff",
+          "#ef4444",
+          "#3b82f6",
+          "#22c55e",
+        ]}
+      ></Pallet>
       <FontButton
         type="button"
         onClick={clearCanvas}

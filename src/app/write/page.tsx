@@ -9,7 +9,7 @@ import InputAlert from "@/components/common/inputAlert";
 import { postDiary } from "@/api/diary";
 import FontButton from "@/components/common/fontButton";
 import useCoordinate from "@/hooks/useCoordinate";
-import Canvas from "@/components/canvas";
+import Canvas from "@/components/client/write/Canvas";
 import axios from "axios";
 import dataURItoBlob from "@/lib/dataURItoBlob";
 

@@ -12,7 +12,7 @@ import UpdateDiaryForm from "./updateDiaryForm";
 import WellDoneButton from "./wellDoneButton";
 import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./canvas";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./client/write/Canvas";
 import { AuthContext } from "@/context/authInfo.context";
 
 const DiaryCard = styled.div`

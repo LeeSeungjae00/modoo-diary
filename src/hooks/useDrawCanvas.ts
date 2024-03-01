@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@/components/canvas";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "@/components/client/write/Canvas";
 import React, { useEffect, useState } from "react";
 
 export default function useDrawCanvas(
