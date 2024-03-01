@@ -22,7 +22,7 @@ export default function Pallet({
   return (
     <ul
       id="PALLET"
-      className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg flex mx-auto mt-3"
+      className="items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 border-r-0 flex mx-auto mt-3"
     >
       {colors.map((_color) => (
         <li
