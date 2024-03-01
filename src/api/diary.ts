@@ -24,8 +24,13 @@ export const getDiary = (offset: number) => {
   }));
 };
 
-export const postDiary = (diary: DiaryWriteType) => {
-  const memberId = Number(getParsedToken()?.sub);
+export const postDiary = ({
+  diary,
+  memberId,
+}: {
+  diary: DiaryWriteType;
+  memberId: number;
+}) => {
   return apiClient.post(API_ROUTE_DIARIES_POST, { ...diary, memberId });
 };
 

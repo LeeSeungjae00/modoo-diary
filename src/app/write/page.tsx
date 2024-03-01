@@ -12,6 +12,7 @@ import useCoordinate from "@/hooks/useCoordinate";
 import Canvas from "@/components/client/write/Canvas";
 import axios from "axios";
 import dataURItoBlob from "@/lib/dataURItoBlob";
+import { useSession } from "next-auth/react";
 
 const FontTextarea = styled.textarea`
   font-family: Chilgok_lws;
@@ -23,6 +24,7 @@ const FontTextarea = styled.textarea`
 
 export default function Write() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { data: session } = useSession();
   const [isDrawAble, setIsDrawAble] = useState(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +62,7 @@ export default function Write() {
           drawing: canvasData,
         };
       }
-      write(resp);
+      write({ diary: resp, memberId: session?.user.id as number });
     } catch (error) {
       console.log("그림 업로드 실패");
       setIsLoading(false);
