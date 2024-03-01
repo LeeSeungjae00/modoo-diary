@@ -35,11 +35,9 @@ const WellDoneDiv = styled.div`
 
 export default React.memo(function WellDoneButton({
   id,
-  isLogin,
   recommendCount,
 }: {
   id: number;
-  isLogin: AccessTokenPayload | undefined;
   recommendCount: number;
 }) {
   const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);

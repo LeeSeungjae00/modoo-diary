@@ -34,13 +34,13 @@ export const postDiary = ({
   return apiClient.post(API_ROUTE_DIARIES_POST, { ...diary, memberId });
 };
 
-export const patchDiary = (diary: DiaryType & { diaryId: number }) => {
-  const memberId = Number(getParsedToken()?.sub);
-
+export const patchDiary = (
+  diary: DiaryType & { diaryId: number; memberId: number }
+) => {
   const data = {
     title: diary.title,
     content: diary.content,
-    memberId,
+    memberId: diary.memberId,
   };
 
   return apiClient.patch(

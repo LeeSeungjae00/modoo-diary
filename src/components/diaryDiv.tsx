@@ -13,7 +13,7 @@ import WellDoneButton from "./wellDoneButton";
 import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./client/write/Canvas";
-import { AuthContext } from "@/context/authInfo.context";
+import { useSession } from "next-auth/react";
 
 const DiaryCard = styled.div`
   font-family: Chilgok_lws;
@@ -57,16 +57,13 @@ export default React.memo(function DiaryDiv({
   drawing,
 }: DiaryDivType) {
   const [isWrite, setIsWrite] = useState(false);
-  const {
-    state: { isLogin },
-  } = useContext(AuthContext);
-
   const { mutate: remove } = useRemoveMutation();
   const { mutate: write } = useWriteMutation(id);
+  const { data: session } = useSession();
 
   const onSubmitWrite = (data: DiaryType) => {
     write(
-      { ...data, diaryId: id },
+      { ...data, diaryId: id, memberId: session?.user.id as number },
       {
         onSuccess: () => {
           setIsWrite(false);
@@ -81,7 +78,7 @@ export default React.memo(function DiaryDiv({
         <div className="flex">
           <p className="text-lg">{nickName}의 일기</p>
 
-          {isLogin?.nickName === nickName && (
+          {session?.user.name === nickName && (
             <EditButtons
               isWrite={isWrite}
               onUpdate={() => setIsWrite(true)}
@@ -141,12 +138,10 @@ export default React.memo(function DiaryDiv({
           </p>
           <MoreHarderButton
             id={id}
-            isLogin={isLogin}
             unlikeCount={unlikeCount}
           ></MoreHarderButton>
           <WellDoneButton
             id={id}
-            isLogin={isLogin}
             recommendCount={recommendCount}
           ></WellDoneButton>
         </div>

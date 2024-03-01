@@ -36,15 +36,12 @@ const MoreHarderDiv = styled.div`
 
 export default React.memo(function MoreHarderButton({
   id,
-  isLogin,
   unlikeCount,
 }: {
   id: number;
-  isLogin: AccessTokenPayload | undefined;
   unlikeCount: number;
 }) {
   const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
-  const route = useRouter();
   const { data: session } = useSession();
   const onClickMoreHarder = (diaryId: number) => {
     if (session?.user) {
