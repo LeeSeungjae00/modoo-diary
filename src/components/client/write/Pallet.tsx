@@ -9,7 +9,7 @@ export default function Pallet({
   colorChange: (color: string) => void;
   isDraw: boolean;
   setIsDraw: (isDraw: boolean) => void;
-  colors: string[];
+  colors: { code: string; tailwind: string }[];
 }) {
   const [color, setColor] = useState<string>("#000000");
   const onClickColor = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -26,16 +26,16 @@ export default function Pallet({
     >
       {colors.map((_color) => (
         <li
-          key={_color}
+          key={_color.code}
           className={`border-b border-gray-200 sm:border-b-0 sm:border-r  ${
-            isDraw && color === _color && "bg-gray-300"
+            isDraw && color === _color.code && "bg-gray-300"
           }`}
         >
           <label className="w-full p-1 text-sm flex items-center justify-center">
-            <div className={`w-3 h-3 ${`bg-[${_color}]`}`}></div>
+            <div className={`w-3 h-3 ${_color.tailwind}`}></div>
             <input
               onClick={onClickColor}
-              value={_color}
+              value={_color.code}
               type="radio"
               className="hidden"
             />

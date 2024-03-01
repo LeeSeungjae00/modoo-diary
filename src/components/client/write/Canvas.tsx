@@ -63,12 +63,12 @@ export default function Canvas({
         isDraw={isDraw}
         setIsDraw={setIsDraw}
         colors={[
-          "#000000",
-          "#6b7280",
-          "#ffffff",
-          "#ef4444",
-          "#3b82f6",
-          "#22c55e",
+          { code: "#000000", tailwind: "bg-black" },
+          { code: "#6b7280", tailwind: "bg-gray-500" },
+          { code: "#ffffff", tailwind: "bg-white" },
+          { code: "#ef4444", tailwind: "bg-red-500" },
+          { code: "#3b82f6", tailwind: "bg-blue-500" },
+          { code: "#22c55e", tailwind: "bg-green-500" },
         ]}
       ></Pallet>
       <FontButton
