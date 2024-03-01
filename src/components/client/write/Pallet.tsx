@@ -32,7 +32,7 @@ export default function Pallet({
           }`}
         >
           <label className="w-full p-1 text-sm flex items-center justify-center">
-            <div className={`w-3 h-3 bg-[${_color}]`}></div>
+            <div className={`w-3 h-3 ${`bg-[${_color}]`}`}></div>
             <input
               onClick={onClickColor}
               value={_color}
