@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!session) {
-    return NextResponse.rewrite(new URL("/login", request.url));
+    return NextResponse.next();
   }
 
   const requestHeaders = new Headers(request.headers);
