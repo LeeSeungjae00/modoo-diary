@@ -4,7 +4,7 @@ import InputAlert from "@/components/common/inputAlert";
 import Label from "@/components/common/label";
 import { SignInFormType } from "@/types/auth";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -31,7 +31,6 @@ export default function LoginForm() {
       return;
     }
     router.push("/diaries", { scroll: false });
-    router.refresh();
   }
   return (
     <form

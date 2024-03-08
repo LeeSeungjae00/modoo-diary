@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Header from "@/components/server/common/header";
+import Header from "@/components/client/common/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";

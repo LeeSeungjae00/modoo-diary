@@ -41,7 +41,6 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
       redirect: false,
     });
     setErrorMessage("");
-    router.refresh();
   };
 
   const { mutate: updateRegion } = useMutation({
