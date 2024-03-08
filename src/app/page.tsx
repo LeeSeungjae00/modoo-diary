@@ -8,9 +8,12 @@ export type Products = {
 };
 
 async function getFirstDiaries() {
-  const res = await fetch(`http://mingky.me:22001/api/diaries?offset=0`, {
-    next: { revalidate: 0 },
-  })
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ORIGIN_SERVER}/api/diaries?offset=0`,
+    {
+      next: { revalidate: 0 },
+    }
+  )
     .then((res) => res.json())
     .then((res) => {
       return {
