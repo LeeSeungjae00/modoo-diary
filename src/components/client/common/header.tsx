@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import LogoutButton from "./LogoutButton";
 import FixedHeader from "@/components/client/common/FixedHeader";
 import { useSession } from "next-auth/react";
@@ -14,7 +12,7 @@ export default function Header() {
     <>
       <nav className="absolute top-0 left-0 z-10 w-full h-[50px] px-[1rem] py-0">
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="font-bold text-lg flex">
+          <Link href="/diaries" className="font-bold text-lg flex">
             ✎
             {session?.user.name
               ? (
@@ -35,7 +33,7 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link href="/auth/login" className="font-bold">
+              <Link scroll={false} href="/auth/login" className="font-bold">
                 로그인
               </Link>
               <Link href="/auth/signup" className="font-bold">

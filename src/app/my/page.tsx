@@ -2,9 +2,10 @@ import React from "react";
 import MyForm from "@/components/client/my/MyForm";
 import { getServerSession } from "next-auth";
 import { getMyInfoSSR } from "@/api/members";
-import { authOption } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { signOut } from "next-auth/react";
+import authOption from "@/constants/authOption";
+import Card from "@/components/server/common/Card";
 
 export default async function My() {
   const session = await getServerSession(authOption);
@@ -20,11 +21,8 @@ export default async function My() {
   }
 
   return (
-    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-        내 정보를 수정하세요
-      </h1>
+    <Card title="내 정보를 수정하세요">
       <MyForm {...data}></MyForm>
-    </div>
+    </Card>
   );
 }

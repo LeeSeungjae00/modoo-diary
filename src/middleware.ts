@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 
   if (session && publicRoutes.includes(currentPath)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/diaries";
     return NextResponse.redirect(url);
   }
 

@@ -5,7 +5,7 @@ import useIntersection from "@/hooks/useIntersection";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { FontSpan } from "@/components/common/fontSpan";
-import DiaryDiv from "@/components/diaryDiv";
+import DiaryDiv from "@/components/client/diaries/diaryDiv";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export type Products = {
