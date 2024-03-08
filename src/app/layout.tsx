@@ -4,14 +4,11 @@ import Header from "@/components/client/common/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <head>
@@ -22,13 +19,11 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        {/* <AuthContextProvider> */}
         <AuthSessionProvider>
           <Header></Header>
           <div className="max-w-5xl mx-auto w-screen min-h-screen">
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </div>
-          {/* </AuthContextProvider> */}
         </AuthSessionProvider>
         <Analytics></Analytics>
       </body>

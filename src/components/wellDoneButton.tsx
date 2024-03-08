@@ -47,9 +47,7 @@ export default React.memo(function WellDoneButton({
     if (session?.user) {
       like({ diaryId, memberId: session.user.id });
     } else {
-      signOut({
-        callbackUrl: "/auth/login",
-      });
+      route.push("/auth/login", { scroll: false });
     }
   };
   return (

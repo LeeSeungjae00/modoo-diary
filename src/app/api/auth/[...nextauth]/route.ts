@@ -3,6 +3,7 @@ import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { revalidatePath } from "next/cache";
 
 export const authOption: NextAuthOptions = {
   providers: [
@@ -84,6 +85,10 @@ export const authOption: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn() {
+      revalidatePath("/", "layout");
+      return true;
+    },
     async jwt({ token, user }) {
       if (
         token.accessToken_exp &&

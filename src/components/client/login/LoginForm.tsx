@@ -30,8 +30,7 @@ export default function LoginForm() {
       });
       return;
     }
-    router.push("/");
-    // window.location.href = "/";
+    router.push("/diaries", { scroll: false });
   }
   return (
     <form
