@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "../../client/common/LogoutButton";
 import FixedHeader from "@/components/client/common/FixedHeader";
 import { useSession } from "next-auth/react";
 

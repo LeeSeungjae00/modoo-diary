@@ -5,14 +5,14 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import React, { useContext, useState } from "react";
 import useWriteMutation from "@/hooks/mutations/useWriteMutation";
-import FontPre from "./common/fontPre";
+import FontPre from "../../common/fontPre";
 import EditButtons from "./editButtons";
 import useRemoveMutation from "@/hooks/mutations/useRemoveMutation";
 import UpdateDiaryForm from "./updateDiaryForm";
 import WellDoneButton from "./wellDoneButton";
 import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./client/write/Canvas";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../write/Canvas";
 import { useSession } from "next-auth/react";
 
 const DiaryCard = styled.div`

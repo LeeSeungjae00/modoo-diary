@@ -1,5 +1,5 @@
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
-import InfiniteDiary from "@/components/infiniteDiary";
+import InfiniteDiary from "@/components/client/diaries/infiniteDiary";
 import { Hydrate, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/lib/getQueryClient";
 

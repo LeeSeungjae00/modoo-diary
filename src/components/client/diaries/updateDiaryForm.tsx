@@ -1,9 +1,9 @@
 import React from "react";
-import InputAlert from "./common/inputAlert";
+import InputAlert from "../../common/inputAlert";
 import { DiaryType } from "@/types/diary";
 import { useForm } from "react-hook-form";
-import FontPre from "./common/fontPre";
-import FontButton from "./common/fontButton";
+import FontPre from "../../common/fontPre";
+import FontButton from "../../common/fontButton";
 
 export default function UpdateDiaryForm({
   defaultValue,
