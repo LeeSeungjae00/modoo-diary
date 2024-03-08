@@ -43,13 +43,12 @@ export default React.memo(function MoreHarderButton({
 }) {
   const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
   const { data: session } = useSession();
+  const route = useRouter();
   const onClickMoreHarder = (diaryId: number) => {
     if (session?.user) {
       unLike({ diaryId, memberId: session.user.id });
     } else {
-      signOut({
-        callbackUrl: "/auth/login",
-      });
+      route.push("/auth/login", { scroll: false });
     }
   };
   return (

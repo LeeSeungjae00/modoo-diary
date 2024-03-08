@@ -34,7 +34,7 @@ export default async function Header() {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link href="/auth/login" className="font-bold">
+              <Link scroll={false} href="/auth/login" className="font-bold">
                 로그인
               </Link>
               <Link href="/auth/signup" className="font-bold">
