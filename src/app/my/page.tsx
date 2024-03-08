@@ -2,9 +2,9 @@ import React from "react";
 import MyForm from "@/components/client/my/MyForm";
 import { getServerSession } from "next-auth";
 import { getMyInfoSSR } from "@/api/members";
-import { authOption } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { signOut } from "next-auth/react";
+import authOption from "@/constants/authOption";
 
 export default async function My() {
   const session = await getServerSession(authOption);

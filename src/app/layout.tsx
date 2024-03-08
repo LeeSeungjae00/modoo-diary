@@ -19,7 +19,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className={inter.className}>
         <AuthSessionProvider>
-          {/* @ts-expect-error Async Server Component */}
           <Header></Header>
           <div className="max-w-5xl mx-auto w-screen min-h-screen">
             <ReactQueryProvider>{children}</ReactQueryProvider>
