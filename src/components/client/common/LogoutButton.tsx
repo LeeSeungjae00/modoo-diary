@@ -4,7 +4,6 @@ import React from "react";
 
 export default function LogoutButton() {
   const logout = () => {
-    // router.push("/");
     signOut();
   };
 

@@ -13,7 +13,7 @@ export default async function Header() {
     <>
       <nav className="absolute top-0 left-0 z-10 w-full h-[50px] px-[1rem] py-0">
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="font-bold text-lg flex">
+          <Link href="/diaries" className="font-bold text-lg flex">
             ✎
             {session?.user.name
               ? (
