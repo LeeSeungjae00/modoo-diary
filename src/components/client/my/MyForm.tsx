@@ -7,6 +7,7 @@ import Radio from "@/components/common/radio";
 import { MyInfoType } from "@/types/diary";
 import { useMutation } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -14,6 +15,7 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const { data: session } = useSession();
+  const router = useRouter();
 
   const {
     register,
@@ -32,16 +34,21 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
     },
   });
 
+  const mutateSuccess = () => {
+    signIn("token-reissue-credential", {
+      accessToken: session?.user.accessToken,
+      refreshToken: session?.user.refreshToken,
+      redirect: false,
+    });
+    setErrorMessage("");
+    router.refresh();
+  };
+
   const { mutate: updateRegion } = useMutation({
     mutationFn: patchRegion,
     onSuccess: () => {
       setSuccessMessage("지역이 변경되었습니다");
-      signIn("token-reissue-credential", {
-        accessToken: session?.user.accessToken,
-        refreshToken: session?.user.refreshToken,
-        redirect: false,
-      });
-      setErrorMessage("");
+      mutateSuccess();
     },
     onError: (error: any) => {
       console.log(error);
@@ -53,12 +60,7 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
     mutationFn: patchEmail,
     onSuccess: () => {
       setSuccessMessage("이메일이 변경되었습니다");
-      signIn("token-reissue-credential", {
-        accessToken: session?.user.accessToken,
-        refreshToken: session?.user.refreshToken,
-        redirect: false,
-      });
-      setErrorMessage("");
+      mutateSuccess();
     },
     onError: (error: any) => {
       setErrorMessage(error?.response?.data.error.code || "");
@@ -69,12 +71,7 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
     mutationFn: patchNickname,
     onSuccess: () => {
       setSuccessMessage("닉네임이 변경되었습니다");
-      signIn("token-reissue-credential", {
-        accessToken: session?.user.accessToken,
-        refreshToken: session?.user.refreshToken,
-        redirect: false,
-      });
-      setErrorMessage("");
+      mutateSuccess();
     },
     onError: (error: any) => {
       console.log(error);

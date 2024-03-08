@@ -4,7 +4,6 @@ import Header from "@/components/client/common/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
-import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className={inter.className}>
         <AuthSessionProvider>
+          {/* @ts-expect-error Async Server Component */}
           <Header></Header>
           <div className="max-w-5xl mx-auto w-screen min-h-screen">
             <ReactQueryProvider>{children}</ReactQueryProvider>

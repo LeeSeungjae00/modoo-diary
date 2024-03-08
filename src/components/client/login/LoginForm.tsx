@@ -31,6 +31,7 @@ export default function LoginForm() {
       return;
     }
     router.push("/diaries", { scroll: false });
+    router.refresh();
   }
   return (
     <form

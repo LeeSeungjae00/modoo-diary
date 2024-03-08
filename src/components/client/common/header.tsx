@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
@@ -7,9 +6,9 @@ import LogoutButton from "./LogoutButton";
 import FixedHeader from "@/components/client/common/FixedHeader";
 import { useSession } from "next-auth/react";
 
-export default function Header() {
-  // const session = await getServerSession(authOption);
-  const { data: session } = useSession();
+export default async function Header() {
+  const session = await getServerSession(authOption);
+  // const { data: session } = useSession();
   return (
     <>
       <nav className="absolute top-0 left-0 z-10 w-full h-[50px] px-[1rem] py-0">

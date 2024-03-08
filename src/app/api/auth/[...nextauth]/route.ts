@@ -85,10 +85,6 @@ export const authOption: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn() {
-      revalidatePath("/", "layout");
-      return true;
-    },
     async jwt({ token, user }) {
       if (
         token.accessToken_exp &&

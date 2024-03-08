@@ -26,17 +26,17 @@ export default function FixedHeader({ isLogin }: { isLogin: boolean }) {
 
   return (
     <LocalNav isSticky={isSticky}>
-      {isLogin ? (
-        <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
+      <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
+        {isLogin ? (
           <Link href="/write" className="font-bold">
             일기 쓰기 ✎
           </Link>
-        </div>
-      ) : (
-        <div className="h-full max-w-5xl mx-auto flex items-center justify-end">
-          <p className="font-bold">로그인을 하고 일기를 써보세요</p>
-        </div>
-      )}
+        ) : (
+          <Link scroll={false} href="/auth/login" className="font-bold">
+            로그인을 하고 일기를 써보세요
+          </Link>
+        )}
+      </div>
     </LocalNav>
   );
 }
