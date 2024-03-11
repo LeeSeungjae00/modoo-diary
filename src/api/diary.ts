@@ -4,6 +4,7 @@ import {
   API_ROUTE_DIARIES_PATCH,
   API_ROUTE_DIARIES_POST,
   API_ROUTE_DIARIES_STICKER_PUT,
+  API_ROUTE_DIARIES_STICKER_PUT_V2,
 } from "@/constants/api/diary";
 import apiClient from "./modooClient";
 import { DiaryType, DiaryWriteType } from "@/types/diary";
@@ -71,6 +72,26 @@ export const putDiaryLike = async ({
   };
 
   return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT, null, config);
+};
+
+export const putDiaryLikeV2 = async ({
+  diaryId,
+  memberId,
+  count,
+}: {
+  diaryId: number;
+  memberId: number;
+  count: number;
+}) => {
+  const config = {
+    params: {
+      memberId,
+      diaryId,
+      recommendYn: count,
+    },
+  };
+
+  return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT_V2, null, config);
 };
 
 export const putDiaryUnLike = ({
