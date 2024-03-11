@@ -1,4 +1,4 @@
-import { postSignIn, reissue } from "@/api/auth";
+import { checkAuthCode, postSignIn, reissue } from "@/api/auth";
 import { AccessTokenPayload } from "@/types/auth";
 import jwtDecode from "jwt-decode";
 import { NextAuthOptions } from "next-auth";
@@ -6,6 +6,41 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOption: NextAuthOptions = {
   providers: [
+    CredentialsProvider({
+      id: "naver-credential",
+      name: "naver-credential",
+      type: "credentials",
+      credentials: {
+        code: { type: "text" },
+      },
+      async authorize(credentials, _req) {
+        try {
+          if (!credentials) {
+            return null;
+          }
+
+          const res = await checkAuthCode(credentials.code);
+
+          console.log(res);
+
+          if (res.data.accessToken && res.data.refreshToken) {
+            const user = jwtDecode<AccessTokenPayload>(res.data.accessToken);
+            return {
+              id: user.sub,
+              name: user.nickName,
+              role: user.role,
+              accessToken_exp: user.exp,
+              accessToken: res.data.accessToken,
+              refreshToken: res.data.refreshToken,
+            };
+          }
+          return null;
+        } catch (e) {
+          console.error(e);
+          return null;
+        }
+      },
+    }),
     CredentialsProvider({
       id: "id-pw-credential",
       name: "Credentials",

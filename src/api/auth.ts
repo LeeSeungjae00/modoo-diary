@@ -57,3 +57,10 @@ export const postSignUp = (formData: SignUpFormType) => {
 
   return apiClient.post(API_ROUTE_AUTH_SIGNUP, data, config);
 };
+
+export const checkAuthCode = async (code: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ORIGIN_SERVER}/api/auth/oauth2/naver?code=${code}`
+  );
+  return await res.json();
+};

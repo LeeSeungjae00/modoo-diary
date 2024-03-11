@@ -5,7 +5,7 @@ import Label from "@/components/common/label";
 import { SignInFormType } from "@/types/auth";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -113,6 +113,36 @@ export default function LoginForm({
           className="w-full text-blue-800 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         >
           일기 쓰러 가기
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            router.push(`/java/api/auth/naver`);
+          }}
+          className="flex w-full justify-center items-center text-white bg-[#03C75A]  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-1.5 text-center"
+        >
+          <svg
+            width="33"
+            height="33"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_403_243)">
+              <path
+                d="M18 20H2C0.9 20 0 19.1 0 18V2C0 0.9 0.9 0 2 0H18C19.1 0 20 0.9 20 2V18C20 19.1 19.1 20 18 20Z"
+                fill="#03C75A"
+              />
+              <path
+                d="M11.35 10.25L8.50002 6.19995H6.15002V13.8H8.65002V9.74995L11.5 13.8H13.85V6.19995H11.35V10.25Z"
+                fill="white"
+              />
+            </g>
+            <defs>
+              <rect width="20" height="20" fill="white" />
+            </defs>
+          </svg>
+          네이버로 로그인 하고 일기쓰러가기
         </button>
       </form>
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
