@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/java/:slug*",
-        destination: "http://192,168.100.150:8080/:slug*",
+        destination: "http://mingky.me:22001/:slug*",
       },
     ];
   },
