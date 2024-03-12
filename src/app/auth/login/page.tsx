@@ -6,6 +6,11 @@ import authOption from "@/constants/authOption";
 import Card from "@/components/server/common/Card";
 import LoginForm from "@/components/client/auth/login/LoginForm";
 
+export const metadata = {
+  title: "모두의 일기 | 로그인",
+  description: "로그인 페이지",
+};
+
 export default async function SignIn() {
   const session = await getServerSession(authOption);
 

@@ -1,9 +1,15 @@
+import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
+import useCountDebounce from "@/hooks/useCountDebouce";
+import useOptimisticPatchingCount from "@/hooks/useOptimisticPatchingCount";
 import { AccessTokenPayload } from "@/types/auth";
+import { DiaryPageType, InfinitiScrollDataType } from "@/types/diary";
 import styled from "@emotion/styled";
+import { useQueryClient } from "@tanstack/react-query";
+import { th } from "date-fns/locale";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const WellDone = styled.button`
   background-image: url("/static/images/welldone-removebg-preview.png");
@@ -40,23 +46,25 @@ export default React.memo(function WellDoneButton({
   id: number;
   recommendCount: number;
 }) {
-  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
   const route = useRouter();
   const { data: session } = useSession();
-  const onClickWellDone = (diaryId: number) => {
+  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
+  const setCount = useCountDebounce((count) => like({ diaryId: id, count }));
+  const setQueryFn = useOptimisticPatchingCount(id, "recommendCount");
+
+  const onClickWellDone = useCallback(() => {
     if (session?.user) {
-      like({ diaryId, memberId: session.user.id });
+      setCount((prev) => prev + 1);
+      setQueryFn();
     } else {
       route.push("/auth/login", { scroll: false });
     }
-  };
+  }, [session?.user, setCount, setQueryFn, route]);
+
   return (
     <WellDoneDiv>
-      <WellDone
-        disabled={isLoadingLike}
-        onClick={() => onClickWellDone(id)}
-      ></WellDone>
-      x {recommendCount}
+      <WellDone disabled={isLoadingLike} onClick={onClickWellDone}></WellDone>x{" "}
+      {recommendCount}
     </WellDoneDiv>
   );
 });

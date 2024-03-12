@@ -23,7 +23,7 @@ async function getFirstDiaries() {
   return res;
 }
 
-export default async function Home(test: any) {
+export default async function Home() {
   const queryClient = getQueryClient();
   await queryClient.prefetchInfiniteQuery({
     queryKey: [API_ROUTE_DIARIES_GET],

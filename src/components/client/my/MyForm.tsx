@@ -87,22 +87,8 @@ export default function MyForm({ region, nickName, email }: MyInfoType) {
           <Input
             {...register("email", { required: "이메일을 입력해주세요" })}
             placeholder="name@company.com"
+            disabled
           />
-          <button
-            title="이메일 수정하기"
-            type="button"
-            className="text-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={() => {
-              if (session) {
-                updateEmail({
-                  memberId: session.user.id.toString(),
-                  email: getValues("email"),
-                });
-              }
-            }}
-          >
-            <span className="w-5 h-5">💾</span>
-          </button>
         </div>
       </div>
       {errors.email && (

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default async function Home(test: any) {
+export default async function Home() {
   redirect("/diaries");
 }
