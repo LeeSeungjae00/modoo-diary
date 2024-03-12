@@ -7,11 +7,6 @@ export type Products = {
   products: number[];
 };
 
-export const metadata = {
-  title: "모두의 일기",
-  description: "모두의 일기",
-};
-
 async function getFirstDiaries() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ORIGIN_SERVER}/api/diaries?offset=0`,
