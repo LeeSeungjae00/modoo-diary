@@ -10,7 +10,6 @@ const useLikeMutation = (id: number) => {
     mutationFn: putDiaryLikeV2,
     onMutate: async () => {
       queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
-      console.log("onMutate");
 
       const previous = queryClient.getQueryData([API_ROUTE_DIARIES_GET]);
       return { previous };
@@ -19,7 +18,6 @@ const useLikeMutation = (id: number) => {
       queryClient.setQueriesData([API_ROUTE_DIARIES_GET], context?.previous);
     },
     onSuccess: () => {
-      console.log("onSuccess");
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE_DIARIES_GET],
         refetchPage: (
