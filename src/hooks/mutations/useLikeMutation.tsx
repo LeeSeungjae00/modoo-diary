@@ -8,7 +8,7 @@ const useLikeMutation = (id: number) => {
 
   return useMutation({
     mutationFn: putDiaryLikeV2,
-    onMutate: async ({ diaryId }) => {
+    onMutate: async () => {
       queryClient.cancelQueries({ queryKey: [API_ROUTE_DIARIES_GET] });
       console.log("onMutate");
 

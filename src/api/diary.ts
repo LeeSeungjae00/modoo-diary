@@ -76,22 +76,15 @@ export const putDiaryLike = async ({
 
 export const putDiaryLikeV2 = async ({
   diaryId,
-  memberId,
   count,
 }: {
   diaryId: number;
-  memberId: number;
   count: number;
 }) => {
-  const config = {
-    params: {
-      memberId,
-      diaryId,
-      recommendYn: count,
-    },
-  };
-
-  return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT_V2, null, config);
+  return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT_V2, {
+    diaryId,
+    recommend: count,
+  });
 };
 
 export const putDiaryUnLike = ({
@@ -110,4 +103,24 @@ export const putDiaryUnLike = ({
   };
 
   return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT, null, config);
+};
+
+export const putDiaryUnLikeV2 = ({
+  diaryId,
+  count,
+}: {
+  diaryId: number;
+  count: number;
+}) => {
+  const config = {
+    params: {
+      diaryId,
+      unlike: count,
+    },
+  };
+
+  return apiClient.put(API_ROUTE_DIARIES_STICKER_PUT_V2, {
+    diaryId,
+    unlike: count,
+  });
 };

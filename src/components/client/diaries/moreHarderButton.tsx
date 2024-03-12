@@ -1,10 +1,12 @@
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
 import useUnLikeMutation from "@/hooks/mutations/useUnLikeMutation";
+import useCountDebounce from "@/hooks/useCountDebouce";
+import useOptimisticPatchingCount from "@/hooks/useOptimisticPatchingCount";
 import { AccessTokenPayload } from "@/types/auth";
 import styled from "@emotion/styled";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useCallback } from "react";
 
 const MoreHarder = styled.button`
   background-image: url("/static/images/moreharder.png");
@@ -41,21 +43,26 @@ export default React.memo(function MoreHarderButton({
   id: number;
   unlikeCount: number;
 }) {
-  const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
-  const { data: session } = useSession();
   const route = useRouter();
-  const onClickMoreHarder = (diaryId: number) => {
+  const { data: session } = useSession();
+  const { mutate: unLike, isLoading: isLoadingLike } = useUnLikeMutation(id);
+  const setCount = useCountDebounce((count) => unLike({ diaryId: id, count }));
+  const setQueryFn = useOptimisticPatchingCount(id, "unlikeCount");
+
+  const onClickMoreHarder = useCallback(() => {
     if (session?.user) {
-      unLike({ diaryId, memberId: session.user.id });
+      setCount((prev) => prev + 1);
+      setQueryFn();
     } else {
       route.push("/auth/login", { scroll: false });
     }
-  };
+  }, [route, session?.user, setCount, setQueryFn]);
+
   return (
     <MoreHarderDiv>
       <MoreHarder
         disabled={isLoadingLike}
-        onClick={() => onClickMoreHarder(id)}
+        onClick={onClickMoreHarder}
       ></MoreHarder>
       x {unlikeCount}
     </MoreHarderDiv>

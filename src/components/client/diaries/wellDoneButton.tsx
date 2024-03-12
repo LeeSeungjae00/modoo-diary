@@ -1,5 +1,7 @@
 import { API_ROUTE_DIARIES_GET } from "@/constants/api/diary";
 import useLikeMutation from "@/hooks/mutations/useLikeMutation";
+import useCountDebounce from "@/hooks/useCountDebouce";
+import useOptimisticPatchingCount from "@/hooks/useOptimisticPatchingCount";
 import { AccessTokenPayload } from "@/types/auth";
 import { DiaryPageType, InfinitiScrollDataType } from "@/types/diary";
 import styled from "@emotion/styled";
@@ -7,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { th } from "date-fns/locale";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const WellDone = styled.button`
   background-image: url("/static/images/welldone-removebg-preview.png");
@@ -44,77 +46,25 @@ export default React.memo(function WellDoneButton({
   id: number;
   recommendCount: number;
 }) {
-  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
-  const [throttle, setThrottle] = useState(0);
-  const [count, setCount] = useState(0);
-  const queryClient = useQueryClient();
   const route = useRouter();
   const { data: session } = useSession();
+  const { mutate: like, isLoading: isLoadingLike } = useLikeMutation(id);
+  const setCount = useCountDebounce((count) => like({ diaryId: id, count }));
+  const setQueryFn = useOptimisticPatchingCount(id, "recommendCount");
 
   const onClickWellDone = useCallback(() => {
     if (session?.user) {
-      console.log(count);
-      like({ diaryId: id, memberId: session.user.id, count: count });
+      setCount((prev) => prev + 1);
+      setQueryFn();
     } else {
       route.push("/auth/login", { scroll: false });
     }
-  }, [count, id, like, route, session]);
-
-  useEffect(() => {
-    if (throttle === 0 && count > 0) {
-      onClickWellDone();
-      setCount(0);
-    }
-  }, [count, onClickWellDone, throttle]);
+  }, [session?.user, setCount, setQueryFn, route]);
 
   return (
     <WellDoneDiv>
-      <WellDone
-        disabled={isLoadingLike}
-        onClick={() => {
-          setCount((prev) => prev + 1);
-          if (throttle === 0) {
-            setThrottle(1);
-            setTimeout(() => {
-              console.log("throttle");
-              setThrottle(0);
-            }, 2000);
-          }
-          queryClient.setQueryData<{
-            pageParams: undefined | number[];
-            pages: InfinitiScrollDataType<DiaryPageType>[];
-          }>([API_ROUTE_DIARIES_GET], (old) => {
-            if (old) {
-              const { pageParams, pages } = old;
-              const newPages = pages.map((page) => {
-                const findedIndex = page.data.findIndex((val) => val.id === id);
-                if (findedIndex > -1) {
-                  const newdata = page.data.map((val) => {
-                    if (val.id === id) {
-                      return {
-                        ...val,
-                        recommendCount: val.recommendCount + 1,
-                      };
-                    }
-                    return val;
-                  });
-
-                  return {
-                    ...page,
-                    data: newdata,
-                  };
-                }
-                return page;
-              });
-              return {
-                pageParams,
-                pages: newPages,
-              };
-            }
-          });
-        }}
-      ></WellDone>
-      x {recommendCount}
+      <WellDone disabled={isLoadingLike} onClick={onClickWellDone}></WellDone>x{" "}
+      {recommendCount}
     </WellDoneDiv>
   );
 });
