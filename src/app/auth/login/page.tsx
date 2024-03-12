@@ -15,7 +15,7 @@ export default async function SignIn() {
   const session = await getServerSession(authOption);
 
   if (session?.user) {
-    redirect("/");
+    redirect("/diaries");
   }
 
   return (

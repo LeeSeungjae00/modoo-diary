@@ -36,7 +36,7 @@ export default function Write() {
   const { mutate: write } = useMutation({
     mutationFn: postDiary,
     onSuccess: () => {
-      router.push("/");
+      router.push("/diaries");
     },
     onError: () => {
       setIsLoading(false);
