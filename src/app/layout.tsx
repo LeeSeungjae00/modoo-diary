@@ -7,6 +7,11 @@ import AuthSessionProvider from "./authSessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  title: "모두의 일기",
+  description: "모두의 일기",
+};
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
