@@ -22,11 +22,6 @@ const FontTextarea = styled.textarea`
   }
 `;
 
-export const metadata = {
-  title: "모두의 일기 | 일기쓰기",
-  description: "일기쓰기 페이지",
-};
-
 export default function Write() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { data: session } = useSession();
