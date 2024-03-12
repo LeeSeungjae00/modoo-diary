@@ -117,7 +117,9 @@ export default function LoginForm({
         <button
           type="button"
           onClick={() => {
-            router.push(`/java/api/auth/naver`);
+            process.env.NEXT_PUBLIC_NAVER_REDIRECT_URL &&
+              (window.location.href =
+                process.env.NEXT_PUBLIC_NAVER_REDIRECT_URL);
           }}
           className="flex w-full justify-center items-center text-white bg-[#03C75A]  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-1.5 text-center"
         >
@@ -142,7 +144,18 @@ export default function LoginForm({
               <rect width="20" height="20" fill="white" />
             </defs>
           </svg>
-          네이버로 로그인 하고 일기쓰러가기
+          네이버로 로그인 하고 일기 쓰러 가기
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URL &&
+              (window.location.href =
+                process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URL);
+          }}
+          className="flex w-full justify-center items-center text-white bg-[#000000]  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-1.5 text-center"
+        >
+          구글
         </button>
       </form>
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">

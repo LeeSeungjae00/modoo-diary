@@ -7,11 +7,12 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const authOption: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: "naver-credential",
-      name: "naver-credential",
+      id: "oauth-credential",
+      name: "oauth-credential",
       type: "credentials",
       credentials: {
         code: { type: "text" },
+        platform: { type: "text" },
       },
       async authorize(credentials, _req) {
         try {
@@ -19,7 +20,12 @@ const authOption: NextAuthOptions = {
             return null;
           }
 
-          const res = await checkAuthCode(credentials.code);
+          console.log(credentials.code, credentials.platform);
+
+          const res = await checkAuthCode(
+            credentials.code,
+            credentials.platform
+          );
 
           console.log(res);
 

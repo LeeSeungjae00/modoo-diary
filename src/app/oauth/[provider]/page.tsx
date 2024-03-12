@@ -11,9 +11,10 @@ export default async function Oauth() {
 
   useEffect(() => {
     const loginAsync = async () => {
-      const result = await signIn(`${provider}-credential`, {
+      const result = await signIn(`oauth-credential`, {
         redirect: false,
         code,
+        platform: provider,
       });
       result?.ok && router.push("/diaries");
       router.push("/auth/login");
