@@ -4,6 +4,8 @@ import Header from "@/components/client/common/header";
 import ReactQueryProvider from "./reactQueryProvider";
 import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
+import React from "react";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
