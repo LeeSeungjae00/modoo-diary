@@ -25,7 +25,11 @@ export default async function page({
   try {
     const res = await fetchCode(searchParams.code);
     console.log(res);
-    redirect("/auth/success");
+    if (res.data) {
+      redirect("/auth/success");
+    } else {
+      redirect("/auth/fail");
+    }
   } catch (error) {
     console.log(error);
     redirect("/auth/fail");

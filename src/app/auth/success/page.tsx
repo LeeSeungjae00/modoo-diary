@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function Hold() {
+export default function Page() {
   return (
     <Card>
       <div className="flex items-center justify-cente flex-col p-2 gap-4">
