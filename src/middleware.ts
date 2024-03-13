@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const protectedRoutes = ["/write", "/my"];
-const publicRoutes = ["/auth/login", "/auth/signup"];
 
 export async function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
@@ -15,7 +14,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (session && publicRoutes.includes(currentPath)) {
+  if (session && currentPath.includes("auth")) {
     const url = request.nextUrl.clone();
     url.pathname = "/diaries";
     return NextResponse.redirect(url);
