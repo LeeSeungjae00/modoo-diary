@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 import React from "react";
 
 const fetchCode = async (code: string) => {
@@ -26,7 +26,7 @@ export default async function page({
     const res = await fetchCode(searchParams.code);
     console.log(res);
     if (res.data) {
-      redirect("/auth/success");
+      redirect("/auth/success", RedirectType.replace);
     } else {
       redirect("/auth/fail");
     }
