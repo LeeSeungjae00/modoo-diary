@@ -22,16 +22,11 @@ export default async function page({
 }: {
   searchParams: { code: string };
 }) {
-  try {
-    const res = await fetchCode(searchParams.code);
-    console.log(res);
-    if (res.data) {
-      redirect("/auth/success", RedirectType.replace);
-    } else {
-      redirect("/auth/fail");
-    }
-  } catch (error) {
-    console.log(error);
+  const res = await fetchCode(searchParams.code);
+  console.log(res);
+  if (res.data) {
+    redirect("/auth/success", RedirectType.replace);
+  } else {
     redirect("/auth/fail");
   }
 }
