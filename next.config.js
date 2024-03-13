@@ -5,10 +5,15 @@ const nextConfig = {
       {
         source: "/java/:slug*",
         destination: "http://mingky.me:22001/:slug*",
-      },
+      }
+    ];
+  },
+  redirects: async () => {
+    return [
       {
         source: "/",
         destination: "/diaries",
+        permanent: true,
       },
     ];
   },
