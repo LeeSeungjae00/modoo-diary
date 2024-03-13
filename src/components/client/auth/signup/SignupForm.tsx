@@ -22,7 +22,7 @@ export default function SignupForm() {
   const { mutate: signUp, isError } = useMutation({
     mutationFn: postSignUp,
     onSuccess: () => {
-      router.push("/auth/login");
+      router.push("/auth/hold");
     },
     onError: (error: any) => {
       setErrorMessage(error?.response?.data.error.code || "");
