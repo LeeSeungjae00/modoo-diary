@@ -58,6 +58,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7948031195682590"
           crossOrigin="anonymous"
         ></script>
+        <script
+          async
+          custom-element="amp-auto-ads"
+          src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+        ></script>
       </head>
       <body className={inter.className}>
         <AuthSessionProvider>
@@ -67,6 +72,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </AuthSessionProvider>
         <Analytics></Analytics>
+        <amp-auto-ads
+          type="adsense"
+          data-ad-client="ca-pub-7948031195682590"
+        ></amp-auto-ads>
       </body>
     </html>
   );

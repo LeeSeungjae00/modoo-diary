@@ -14,12 +14,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (session && currentPath.includes("auth")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/diaries";
-    return NextResponse.redirect(url);
-  }
-
   if (!session) {
     return NextResponse.next();
   }
