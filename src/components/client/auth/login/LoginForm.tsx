@@ -6,11 +6,12 @@ import { SignInFormType } from "@/types/auth";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import OAuthButton from "../../common/OAuthButton";
 import NaverSvg from "../../common/NaverSvg";
 import GoogleSvg from "../../common/GoogleSvg";
+import { GOOGLE_REDIRECT_URL, NAVER_REDIRECT_URL } from "@/constants/api/auth";
 
 export default function LoginForm({
   loginCallBack,
@@ -41,6 +42,7 @@ export default function LoginForm({
 
     loginCallBack ? loginCallBack() : router.push("/diaries");
   }
+
   return (
     <>
       <form
@@ -121,14 +123,20 @@ export default function LoginForm({
           <OAuthButton
             logo={<NaverSvg />}
             text="네이버로 로그인 하고 일기 쓰러 가기"
-            redirectUrl={process.env.NEXT_PUBLIC_NAVER_REDIRECT_URL!}
+            redirectUrl={(() => {
+              if (typeof window === "undefined") return "";
+              return NAVER_REDIRECT_URL(window.location.origin);
+            })()}
             color="bg-[#03C75A]"
             fontColor="text-white"
           />
           <OAuthButton
             logo={<GoogleSvg />}
             text="구글로 로그인 하고 일기 쓰러 가기"
-            redirectUrl={process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URL!}
+            redirectUrl={(() => {
+              if (typeof window === "undefined") return "";
+              return GOOGLE_REDIRECT_URL(window.location.origin);
+            })()}
             color="bg-[#ffffff]"
             fontColor="text-[#00000089]"
           />

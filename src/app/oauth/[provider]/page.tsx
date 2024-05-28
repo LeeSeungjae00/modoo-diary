@@ -19,7 +19,7 @@ export default function Oauth() {
         code,
         platform: provider,
       });
-      result?.ok && router.push("/diaries");
+      result?.ok && router.push("/");
       result?.error && router.push("/auth/login");
     };
     loginAsync();

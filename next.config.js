@@ -5,21 +5,12 @@ const nextConfig = {
       {
         source: "/java/:slug*",
         destination: "http://mingky.me:22001/:slug*",
-      }
-    ];
-  },
-  redirects: async () => {
-    return [
-      {
-        source: "/",
-        destination: "/diaries",
-        permanent: true,
       },
     ];
   },
   images: {
-    domains: ['i.ibb.co'],
+    domains: ["i.ibb.co"],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

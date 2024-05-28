@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://어쩔.tv
+Host: https://modoo-diary.vercel.app/
 
 # Sitemaps
-Sitemap: https://어쩔.tv/sitemap.xml
+Sitemap: https://modoo-diary.vercel.app/sitemap.xml
