@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import AuthSessionProvider from "./authSessionProvider";
 import React from "react";
 import { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,6 +73,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </AuthSessionProvider>
         <Analytics></Analytics>
+        <GoogleAnalytics gaId="G-8K3YSX8579" />
         <amp-auto-ads
           type="adsense"
           data-ad-client="ca-pub-7948031195682590"
