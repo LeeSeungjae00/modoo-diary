@@ -40,7 +40,7 @@ export default function LoginForm({
       return;
     }
 
-    loginCallBack ? loginCallBack() : router.push("/diaries");
+    loginCallBack ? loginCallBack() : router.push("/");
   }
 
   return (
