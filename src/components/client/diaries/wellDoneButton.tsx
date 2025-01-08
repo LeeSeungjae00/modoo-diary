@@ -66,8 +66,12 @@ export default React.memo(function WellDoneButton({
 
   return (
     <WellDoneDiv>
-      <WellDone disabled={isLoadingLike} onClick={onClickWellDone}></WellDone>x{" "}
-      {recommendCount}
+      <WellDone
+        aria-label="참 잘했어요 버튼"
+        disabled={isLoadingLike}
+        onClick={onClickWellDone}
+      ></WellDone>
+      x {recommendCount}
     </WellDoneDiv>
   );
 });

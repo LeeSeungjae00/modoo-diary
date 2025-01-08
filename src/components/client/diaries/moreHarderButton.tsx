@@ -64,6 +64,7 @@ export default React.memo(function MoreHarderButton({
   return (
     <MoreHarderDiv>
       <MoreHarder
+        aria-label="좀더 열심히 버튼"
         disabled={isLoadingLike}
         onClick={onClickMoreHarder}
       ></MoreHarder>
