@@ -9,7 +9,10 @@ import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
 
 const MoreHarder = styled.button`
-  background-image: url("/static/images/moreharder.png");
+  background-image: image-set(
+    "static/images/moreharder.webp" type("image/webp"),
+    "static/images/moreharder.png" type("image/png")
+  );
   background-repeat: no-repeat;
   background-size: cover;
   width: 4rem;

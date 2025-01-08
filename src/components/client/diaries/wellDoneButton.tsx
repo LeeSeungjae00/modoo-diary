@@ -12,7 +12,10 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const WellDone = styled.button`
-  background-image: url("/static/images/welldone-removebg-preview.png");
+  background-image: image-set(
+    "static/images/welldone-removebg-preview.webp" type("image/webp"),
+    "static/images/welldone-removebg-preview.png" type("image/png")
+  );
   background-repeat: no-repeat;
   background-size: cover;
   width: 4rem;
