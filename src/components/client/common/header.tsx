@@ -17,14 +17,11 @@ export default function Header() {
         <div className="h-full max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="font-bold text-lg flex">
             ✎
-            {session?.user.name
-              ? (
-                  <span className="text-lg font-Chilgok">
-                    {" "}
-                    {session.user.name}
-                  </span>
-                ) || ""
-              : " 모두"}
+            {session?.user.name ? (
+              <span className="text-lg font-Chilgok"> {session.user.name}</span>
+            ) : (
+              " 모두"
+            )}
             의 일기
           </Link>
           {session ? (
