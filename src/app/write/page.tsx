@@ -15,7 +15,7 @@ import dataURItoBlob from "@/lib/dataURItoBlob";
 import { useSession } from "next-auth/react";
 
 const FontTextarea = styled.textarea`
-  font-family: Chilgok_lws;
+  font-family: var(--diary-font);
   font-size: 1.5rem;
   ::placeholder {
     font-size: 1.5rem;
