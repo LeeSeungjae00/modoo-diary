@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
+import localFont from "next/font/local";
 
 export const FontSpan = styled.p`
-  font-family: Chilgok_lws;
+  font-family: var(--diary-font);
 `;

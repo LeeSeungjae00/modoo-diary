@@ -7,6 +7,7 @@ import AuthSessionProvider from "./authSessionProvider";
 import React from "react";
 import { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import GlobalStyles from "./GlobalStyles";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,6 +67,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         ></script>
       </head>
       <body className={inter.className}>
+        <GlobalStyles />
         <AuthSessionProvider>
           <Header></Header>
           <div className="max-w-5xl mx-auto w-screen min-h-screen">

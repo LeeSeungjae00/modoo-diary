@@ -14,9 +14,10 @@ import MoreHarderButton from "./moreHarderButton";
 import Image from "next/image";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../write/Canvas";
 import { useSession } from "next-auth/react";
+import localFont from "next/font/local";
 
 const DiaryCard = styled.div`
-  font-family: Chilgok_lws;
+  font-family: var(--diary-font);
   display: flex;
   flex-direction: column;
   width: 100%;
