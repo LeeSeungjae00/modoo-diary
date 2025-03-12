@@ -1,4 +1,4 @@
-# [모두의 일기](https://www.어쩔.tv)
+# [모두의 일기](https://modoo-diary.vercel.app/)
 
 
 # TODO
