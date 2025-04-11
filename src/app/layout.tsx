@@ -14,6 +14,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "모두의 일기",
   description: "모두 다같이 일기를 작성해봐요.",
+  verification: {
+    // <meta name="google-site-verification" content="rcBK8GQfgH1ujGDFpL0nizj5HANdK3z9pO1QKTydIp0" />
+    google:
+      "google-site-verification=rcBK8GQfgH1ujGDFpL0nizj5HANdK3z9pO1QKTydIp0",
+  },
   keywords: [
     "일기",
     "모두",
